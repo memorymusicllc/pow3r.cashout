@@ -35,6 +35,7 @@ import { NewPostFlow } from '@/components/NewPostFlow'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/redux-ui'
 import { Button } from '@/components/redux-ui'
 import { Badge } from '@/components/redux-ui'
+import ComponentLibrary from '@/pages/ComponentLibrary'
 
 // Search Components
 import { SearchHeader } from '@/components/search/SearchIntegration'
@@ -121,7 +122,7 @@ function Dashboard() {
       {/* Main Content with Navigation */}
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Home className="w-4 h-4" />
               <span>Dashboard Overview</span>
@@ -129,6 +130,10 @@ function Dashboard() {
             <TabsTrigger value="new-post" className="flex items-center gap-2">
               <Plus className="w-4 h-4" />
               <span>New Post Flow</span>
+            </TabsTrigger>
+            <TabsTrigger value="library" className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              <span>Component Library</span>
             </TabsTrigger>
           </TabsList>
 
@@ -138,6 +143,10 @@ function Dashboard() {
 
           <TabsContent value="new-post" className="space-y-6">
             <NewPostFlow />
+          </TabsContent>
+
+          <TabsContent value="library" className="space-y-6">
+            <ComponentLibrary />
           </TabsContent>
         </Tabs>
       </div>
