@@ -109,6 +109,296 @@ db.serialize(() => {
     FOREIGN KEY (user_id) REFERENCES users (id)
   )`);
 
+  // AI Response Templates table
+  db.run(`CREATE TABLE IF NOT EXISTS ai_response_templates (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    trigger_keywords TEXT NOT NULL, -- JSON array
+    response_template TEXT NOT NULL,
+    variables TEXT, -- JSON array
+    tone TEXT NOT NULL,
+    priority INTEGER DEFAULT 1,
+    is_active BOOLEAN DEFAULT 1,
+    usage_count INTEGER DEFAULT 0,
+    success_rate REAL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // AI Response Rules table
+  db.run(`CREATE TABLE IF NOT EXISTS ai_response_rules (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    conditions TEXT NOT NULL, -- JSON object
+    actions TEXT NOT NULL, -- JSON object
+    is_active BOOLEAN DEFAULT 1,
+    priority INTEGER DEFAULT 1,
+    usage_count INTEGER DEFAULT 0,
+    success_rate REAL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // AI Response Sessions table
+  db.run(`CREATE TABLE IF NOT EXISTS ai_response_sessions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    lead_id TEXT NOT NULL,
+    messages TEXT NOT NULL, -- JSON array
+    status TEXT DEFAULT 'active',
+    started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_activity DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ai_confidence REAL DEFAULT 0,
+    escalation_reason TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (lead_id) REFERENCES leads (id)
+  )`);
+
+  // Optimization Insights table
+  db.run(`CREATE TABLE IF NOT EXISTS optimization_insights (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    impact TEXT NOT NULL,
+    confidence REAL NOT NULL,
+    suggested_action TEXT NOT NULL,
+    expected_improvement TEXT NOT NULL,
+    implementation_effort TEXT NOT NULL,
+    is_implemented BOOLEAN DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Report Templates table
+  db.run(`CREATE TABLE IF NOT EXISTS report_templates (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    metrics TEXT NOT NULL, -- JSON array
+    time_range TEXT NOT NULL,
+    format TEXT NOT NULL,
+    schedule TEXT, -- JSON object
+    is_active BOOLEAN DEFAULT 1,
+    last_generated DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Custom Dashboards table
+  db.run(`CREATE TABLE IF NOT EXISTS custom_dashboards (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    widgets TEXT NOT NULL, -- JSON array
+    is_public BOOLEAN DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Lead Scoring table
+  db.run(`CREATE TABLE IF NOT EXISTS lead_scoring (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    criteria TEXT NOT NULL, -- JSON object
+    weights TEXT NOT NULL, -- JSON object
+    thresholds TEXT NOT NULL, -- JSON object
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Notification Rules table
+  db.run(`CREATE TABLE IF NOT EXISTS notification_rules (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    conditions TEXT NOT NULL, -- JSON object
+    actions TEXT NOT NULL, -- JSON object
+    is_active BOOLEAN DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Negotiation Sessions table
+  db.run(`CREATE TABLE IF NOT EXISTS negotiation_sessions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    lead_id TEXT NOT NULL,
+    listing_id TEXT NOT NULL,
+    initial_price REAL NOT NULL,
+    current_price REAL NOT NULL,
+    target_price REAL NOT NULL,
+    status TEXT DEFAULT 'active',
+    offers TEXT NOT NULL, -- JSON array
+    meetup_scheduled TEXT, -- JSON object
+    payment_method TEXT,
+    notes TEXT, -- JSON array
+    started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_activity DATETIME DEFAULT CURRENT_TIMESTAMP,
+    completed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (lead_id) REFERENCES leads (id),
+    FOREIGN KEY (listing_id) REFERENCES listings (id)
+  )`);
+
+  // Negotiation Strategies table
+  db.run(`CREATE TABLE IF NOT EXISTS negotiation_strategies (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    conditions TEXT NOT NULL, -- JSON object
+    tactics TEXT NOT NULL, -- JSON object
+    is_active BOOLEAN DEFAULT 1,
+    success_rate REAL DEFAULT 0,
+    usage_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Sale Transactions table
+  db.run(`CREATE TABLE IF NOT EXISTS sale_transactions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    negotiation_id TEXT NOT NULL,
+    lead_id TEXT NOT NULL,
+    listing_id TEXT NOT NULL,
+    final_price REAL NOT NULL,
+    payment_method TEXT NOT NULL,
+    payment_status TEXT DEFAULT 'pending',
+    payment_details TEXT NOT NULL, -- JSON object
+    delivery TEXT NOT NULL, -- JSON object
+    documentation TEXT NOT NULL, -- JSON object
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (negotiation_id) REFERENCES negotiation_sessions (id),
+    FOREIGN KEY (lead_id) REFERENCES leads (id),
+    FOREIGN KEY (listing_id) REFERENCES listings (id)
+  )`);
+
+  // Post Flow Projects table
+  db.run(`CREATE TABLE IF NOT EXISTS post_projects (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    item_name TEXT NOT NULL,
+    item_category TEXT NOT NULL,
+    item_condition TEXT,
+    item_description TEXT,
+    status TEXT DEFAULT 'draft', -- draft, research, writing, images, customize, confirm, posted, archived
+    platforms TEXT, -- JSON array of selected platforms
+    tags TEXT, -- JSON array of tags
+    research_data TEXT, -- JSON object with Abacus analysis
+    pricing_strategy TEXT, -- JSON object with pricing recommendations
+    content_strategy TEXT, -- JSON object with content recommendations
+    images TEXT, -- JSON array of image URLs and metadata
+    generated_content TEXT, -- JSON object with generated posts
+    customizations TEXT, -- JSON object with user customizations
+    posting_schedule TEXT, -- JSON object with posting schedule
+    performance_metrics TEXT, -- JSON object with post performance
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    posted_at DATETIME,
+    archived_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
+  // Abacus Research Results table
+  db.run(`CREATE TABLE IF NOT EXISTS abacus_research (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    project_id TEXT,
+    item_name TEXT NOT NULL,
+    search_query TEXT NOT NULL,
+    research_type TEXT NOT NULL, -- item_analysis, pricing, content_strategy, full_analysis
+    results TEXT NOT NULL, -- JSON object with research results
+    confidence_score REAL,
+    data_sources TEXT, -- JSON array of data sources
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (project_id) REFERENCES post_projects (id)
+  )`);
+
+  // Image Gallery table
+  db.run(`CREATE TABLE IF NOT EXISTS image_gallery (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    project_id TEXT,
+    filename TEXT NOT NULL,
+    original_url TEXT,
+    cloudflare_url TEXT,
+    thumbnail_url TEXT,
+    image_type TEXT, -- original, generated, edited, thumbnail
+    metadata TEXT, -- JSON object with image metadata
+    tags TEXT, -- JSON array of tags
+    is_favorite BOOLEAN DEFAULT 0,
+    usage_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (project_id) REFERENCES post_projects (id)
+  )`);
+
+  // Post History table
+  db.run(`CREATE TABLE IF NOT EXISTS post_history (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    project_id TEXT NOT NULL,
+    platform TEXT NOT NULL,
+    post_content TEXT NOT NULL,
+    images TEXT, -- JSON array of image URLs
+    posting_strategy TEXT, -- JSON object with strategy used
+    status TEXT DEFAULT 'scheduled', -- scheduled, posted, failed, cancelled
+    scheduled_at DATETIME,
+    posted_at DATETIME,
+    platform_post_id TEXT, -- ID from the platform
+    performance_data TEXT, -- JSON object with performance metrics
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (project_id) REFERENCES post_projects (id)
+  )`);
+
+  // Garage Items table (unified storage for all items)
+  db.run(`CREATE TABLE IF NOT EXISTS garage_items (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    item_type TEXT NOT NULL, -- research, post, image, project
+    item_name TEXT NOT NULL,
+    item_data TEXT NOT NULL, -- JSON object with item data
+    category TEXT,
+    tags TEXT, -- JSON array of tags
+    platform TEXT,
+    status TEXT DEFAULT 'active', -- active, sold, draft, archived
+    priority INTEGER DEFAULT 0,
+    is_favorite BOOLEAN DEFAULT 0,
+    last_accessed DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`);
+
   // Insert default user if none exists
   db.get("SELECT COUNT(*) as count FROM users", (err, row) => {
     if (row.count === 0) {
@@ -137,6 +427,73 @@ db.serialize(() => {
       
       db.run(`INSERT INTO auto_response_rules (id, user_id, name, triggers, response, conditions, is_active, priority, platforms, usage_count, success_rate) 
               VALUES ('rule-003', 'user-001', 'Availability Check', '["availability"]', 'Yes, it''s still available! When would you like to see it?', '{"timeWindow": 60, "maxResponses": 1, "skipIfReplied": true}', 0, 3, '["facebook", "offerup", "craigslist"]', 12, 95.0)`);
+      
+      // Insert sample leads
+      db.run(`INSERT INTO leads (id, listing_id, user_id, platform, contact_info, status, source, notes) 
+              VALUES ('lead-001', 'listing-001', 'user-001', 'facebook', '{"name": "John Smith", "email": "john@example.com", "phone": "555-0123"}', 'new', 'facebook_marketplace', 'Interested in AC unit, asking about installation')`);
+      
+      db.run(`INSERT INTO leads (id, listing_id, user_id, platform, contact_info, status, source, notes) 
+              VALUES ('lead-002', 'listing-002', 'user-001', 'offerup', '{"name": "Sarah Johnson", "email": "sarah@example.com", "phone": "555-0456"}', 'qualified', 'offerup_app', 'Ready to purchase, asking about delivery')`);
+      
+      // Insert sample AI response templates
+      db.run(`INSERT INTO ai_response_templates (id, user_id, name, category, trigger_keywords, response_template, variables, tone, priority, is_active, usage_count, success_rate) 
+              VALUES ('template-001', 'user-001', 'Greeting Response', 'greeting', '["hello", "hi", "interested"]', 'Hello! Thank you for your interest in our {{product}}. I''d be happy to help you with any questions.', '["product"]', 'friendly', 1, 1, 25, 88.0)`);
+      
+      db.run(`INSERT INTO ai_response_templates (id, user_id, name, category, trigger_keywords, response_template, variables, tone, priority, is_active, usage_count, success_rate) 
+              VALUES ('template-002', 'user-001', 'Price Inquiry', 'pricing', '["price", "cost", "how much"]', 'The price is ${{price}}. I''m open to reasonable offers and can discuss financing options.', '["price"]', 'professional', 2, 1, 18, 92.5)`);
+      
+      // Insert sample AI response rules
+      db.run(`INSERT INTO ai_response_rules (id, user_id, name, conditions, actions, is_active, priority, usage_count, success_rate) 
+              VALUES ('ai-rule-001', 'user-001', 'High Priority Lead Response', '{"leadScore": [80, 100], "messageLength": [10, 500], "keywords": ["buy", "purchase", "interested"], "platform": ["facebook", "offerup"], "timeOfDay": ["morning", "afternoon", "evening"], "dayOfWeek": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]}', '{"templateId": "template-001", "delay": 30, "escalation": false, "followUp": true}', 1, 1, 12, 95.0)`);
+      
+      // Insert sample optimization insights
+      db.run(`INSERT INTO optimization_insights (id, user_id, category, title, description, impact, confidence, suggested_action, expected_improvement, implementation_effort, is_implemented) 
+              VALUES ('insight-001', 'user-001', 'pricing', 'Optimize AC Unit Pricing', 'Current pricing is 15% above market average. Consider reducing by 5-10% for faster sales.', 'high', 0.85, 'Reduce price by $200-400', '20-30% increase in inquiries', 'low', 0)`);
+      
+      // Insert sample report templates
+      db.run(`INSERT INTO report_templates (id, user_id, name, description, metrics, time_range, format, is_active) 
+              VALUES ('report-001', 'user-001', 'Weekly Sales Report', 'Comprehensive weekly sales performance report', '["totalSales", "conversionRate", "topPlatforms", "leadMetrics"]', 'weekly', 'pdf', 1)`);
+      
+      // Insert sample lead scoring configuration
+      db.run(`INSERT INTO lead_scoring (id, user_id, criteria, weights, thresholds) 
+              VALUES ('scoring-001', 'user-001', '{"messageQuality": 0, "responseTime": 0, "profileCompleteness": 0, "previousInteractions": 0, "budgetIndication": 0}', '{"messageQuality": 0.3, "responseTime": 0.2, "profileCompleteness": 0.2, "previousInteractions": 0.15, "budgetIndication": 0.15}', '{"high": 80, "medium": 60, "low": 40}')`);
+      
+      // Insert sample notification rules
+      db.run(`INSERT INTO notification_rules (id, user_id, name, conditions, actions, is_active) 
+              VALUES ('notif-001', 'user-001', 'High Priority Lead Alert', '{"priority": ["high", "urgent"], "status": ["new", "qualified"], "scoreRange": [80, 100], "platforms": ["facebook", "offerup", "craigslist"]}', '{"email": true, "sms": false, "dashboard": true, "sound": true}', 1)`);
+      
+      // Insert sample negotiation strategies
+      db.run(`INSERT INTO negotiation_strategies (id, user_id, name, conditions, tactics, is_active, success_rate, usage_count) 
+              VALUES ('strategy-001', 'user-001', 'Quick Sale Strategy', '{"listingPrice": [3000, 5000], "leadScore": [70, 100], "timeOnMarket": [0, 7], "competitionLevel": "low"}', '{"initialDiscount": 0.05, "maxDiscount": 0.15, "discountSteps": [0.05, 0.10, 0.15], "timePressure": true, "scarcityMessage": true, "bundleOffers": false}', 1, 0.78, 8)`);
+      
+      // Insert sample post projects
+      db.run(`INSERT INTO post_projects (id, user_id, name, description, item_name, item_category, item_condition, item_description, status, platforms, tags, research_data, pricing_strategy, content_strategy, images, generated_content) 
+              VALUES ('project-001', 'user-001', 'AC Unit Sale Project', 'Professional AC unit selling project', 'Professional AC Unit', 'appliances', 'excellent', 'High-efficiency air conditioning unit in excellent condition', 'customize', '["facebook", "offerup", "craigslist"]', '["appliances", "ac", "hvac", "professional"]', '{"marketAnalysis": {"averagePrice": 4200, "competitionLevel": "medium", "demandScore": 8.5}, "recommendations": ["Emphasize energy efficiency", "Highlight professional installation", "Include warranty information"]}', '{"suggestedPrice": 4200, "priceRange": [3800, 4500], "discountStrategy": "5-10% for quick sale", "valueProps": ["Energy efficient", "Professional grade", "Warranty included"]}', '{"tone": "professional", "keyPoints": ["Energy efficiency", "Professional installation", "Warranty"], "callToAction": "Contact for installation quote"}', '["https://images.pow3r.cashout/ac-main-unit.png", "https://images.pow3r.cashout/ac-installation.jpeg"]', '{"facebook": "Professional AC Unit - Energy Efficient! Perfect for home or office. Includes professional installation and warranty. $4,200 OBO. Contact for details!", "offerup": "AC System - Great Deal! High-efficiency unit, excellent condition. $4,200. Ready for installation.", "craigslist": "Premium AC Unit - Energy Efficient. Professional grade, warranty included. $4,200. Serious inquiries only."}')`);
+      
+      // Insert sample Abacus research
+      db.run(`INSERT INTO abacus_research (id, user_id, project_id, item_name, search_query, research_type, results, confidence_score, data_sources) 
+              VALUES ('research-001', 'user-001', 'project-001', 'Professional AC Unit', 'professional air conditioning unit pricing market analysis', 'full_analysis', '{"marketData": {"averagePrice": 4200, "priceRange": [3500, 5000], "competitionCount": 23, "demandTrend": "increasing"}, "pricingInsights": {"optimalPrice": 4200, "quickSalePrice": 3800, "premiumPrice": 4500}, "contentInsights": {"topKeywords": ["energy efficient", "professional", "warranty", "installation"], "bestPerformingTitles": ["Professional AC Unit - Energy Efficient", "AC System - Great Deal"], "optimalPostingTimes": ["morning", "evening"]}}', 0.92, '["facebook_marketplace", "offerup", "craigslist", "google_trends"]')`);
+      
+      // Insert sample image gallery
+      db.run(`INSERT INTO image_gallery (id, user_id, project_id, filename, original_url, cloudflare_url, thumbnail_url, image_type, metadata, tags, is_favorite, usage_count) 
+              VALUES ('img-001', 'user-001', 'project-001', 'ac-main-unit.png', 'https://images.pow3r.cashout/ac-main-unit.png', 'https://cloudflare.pow3r.cashout/images/ac-main-unit.png', 'https://cloudflare.pow3r.cashout/thumbnails/ac-main-unit.png', 'original', '{"width": 1200, "height": 800, "fileSize": 245760, "format": "png", "uploadDate": "2025-01-08"}', '["ac", "main", "unit", "professional"]', 1, 3)`);
+      
+      db.run(`INSERT INTO image_gallery (id, user_id, project_id, filename, original_url, cloudflare_url, thumbnail_url, image_type, metadata, tags, is_favorite, usage_count) 
+              VALUES ('img-002', 'user-001', 'project-001', 'ac-installation.jpeg', 'https://images.pow3r.cashout/ac-installation.jpeg', 'https://cloudflare.pow3r.cashout/images/ac-installation.jpeg', 'https://cloudflare.pow3r.cashout/thumbnails/ac-installation.jpeg', 'original', '{"width": 800, "height": 600, "fileSize": 156789, "format": "jpeg", "uploadDate": "2025-01-08"}', '["ac", "installation", "professional"]', 0, 2)`);
+      
+      // Insert sample post history
+      db.run(`INSERT INTO post_history (id, user_id, project_id, platform, post_content, images, posting_strategy, status, scheduled_at, posted_at, platform_post_id, performance_data) 
+              VALUES ('post-001', 'user-001', 'project-001', 'facebook', 'Professional AC Unit - Energy Efficient! Perfect for home or office. Includes professional installation and warranty. $4,200 OBO. Contact for details!', '["https://cloudflare.pow3r.cashout/images/ac-main-unit.png"]', '{"tone": "professional", "hashtags": ["#AC", "#HVAC", "#EnergyEfficient"], "postingTime": "morning"}', 'posted', '2025-01-08 09:00:00', '2025-01-08 09:05:00', 'fb_123456789', '{"views": 47, "likes": 8, "shares": 2, "comments": 3, "clicks": 12}')`);
+      
+      // Insert sample garage items
+      db.run(`INSERT INTO garage_items (id, user_id, item_type, item_name, item_data, category, tags, platform, status, priority, is_favorite) 
+              VALUES ('garage-001', 'user-001', 'project', 'AC Unit Sale Project', '{"projectId": "project-001", "status": "customize", "lastActivity": "2025-01-08T10:00:00Z"}', 'appliances', '["ac", "hvac", "professional", "energy-efficient"]', 'multi', 'active', 1, 1)`);
+      
+      db.run(`INSERT INTO garage_items (id, user_id, item_type, item_name, item_data, category, tags, platform, status, priority, is_favorite) 
+              VALUES ('garage-002', 'user-001', 'research', 'AC Unit Market Analysis', '{"researchId": "research-001", "confidenceScore": 0.92, "dataPoints": 156}', 'research', '["market-analysis", "pricing", "ac", "hvac"]', 'multi', 'active', 2, 0)`);
+      
+      db.run(`INSERT INTO garage_items (id, user_id, item_type, item_name, item_data, category, tags, platform, status, priority, is_favorite) 
+              VALUES ('garage-003', 'user-001', 'image', 'AC Main Unit Photo', '{"imageId": "img-001", "url": "https://cloudflare.pow3r.cashout/images/ac-main-unit.png", "usageCount": 3}', 'images', '["ac", "main", "unit", "professional"]', 'multi', 'active', 3, 1)`);
     }
   });
 });
@@ -453,6 +810,1778 @@ app.post('/api/auto-responses', async (req, res) => {
   }
 });
 
+// AI Response System APIs
+app.get('/api/ai-response/templates', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const templates = await dbAll(`
+      SELECT * FROM ai_response_templates 
+      WHERE user_id = ? 
+      ORDER BY priority ASC, created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      triggerKeywords: JSON.parse(template.trigger_keywords),
+      variables: template.variables ? JSON.parse(template.variables) : [],
+      isActive: Boolean(template.is_active)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/ai-response/templates', async (req, res) => {
+  try {
+    const { name, category, triggerKeywords, responseTemplate, variables, tone, priority, userId = 'user-001' } = req.body;
+    const templateId = `template-${Date.now()}`;
+    
+    await dbRun(`
+      INSERT INTO ai_response_templates (id, user_id, name, category, trigger_keywords, response_template, variables, tone, priority, is_active)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+    `, [templateId, userId, name, category, JSON.stringify(triggerKeywords), responseTemplate, JSON.stringify(variables || []), tone, priority]);
+    
+    const newTemplate = await dbGet(`SELECT * FROM ai_response_templates WHERE id = ?`, [templateId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTemplate,
+        triggerKeywords: JSON.parse(newTemplate.trigger_keywords),
+        variables: newTemplate.variables ? JSON.parse(newTemplate.variables) : [],
+        isActive: Boolean(newTemplate.is_active)
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/ai-response/rules', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const rules = await dbAll(`
+      SELECT * FROM ai_response_rules 
+      WHERE user_id = ? 
+      ORDER BY priority ASC, created_at DESC
+    `, [userId]);
+    
+    const parsedRules = rules.map(rule => ({
+      ...rule,
+      conditions: JSON.parse(rule.conditions),
+      actions: JSON.parse(rule.actions),
+      isActive: Boolean(rule.is_active)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedRules,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/ai-response/generate', async (req, res) => {
+  try {
+    const { templateId, message, context, config } = req.body;
+    
+    // Simulate AI response generation
+    const responses = [
+      "Thank you for your interest! I'd be happy to help you with any questions about this item.",
+      "Great question! Let me provide you with more details about this product.",
+      "I appreciate your inquiry. This item is in excellent condition and ready for immediate purchase.",
+      "Thanks for reaching out! I can offer you a great deal on this item."
+    ];
+    
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    
+    res.json({
+      success: true,
+      data: {
+        response: randomResponse,
+        confidence: 0.85,
+        templateId: templateId
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/ai-response/metrics', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    
+    const metrics = {
+      totalResponses: 156,
+      successfulResponses: 142,
+      escalatedResponses: 8,
+      averageResponseTime: 2.3,
+      averageConfidence: 0.87,
+      templateUsage: {
+        'template-001': 45,
+        'template-002': 32,
+        'template-003': 28
+      },
+      categoryBreakdown: {
+        'greeting': 40,
+        'pricing': 35,
+        'availability': 25
+      },
+      platformBreakdown: {
+        'facebook': 45,
+        'offerup': 35,
+        'craigslist': 20
+      },
+      lastUpdated: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      data: metrics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Analytics APIs
+app.get('/api/analytics/metrics', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    
+    const metrics = {
+      totalListings: 3,
+      activeListings: 2,
+      soldListings: 1,
+      averageTimeToSale: 12.5,
+      averagePriceReduction: 8.5,
+      totalLeads: 15,
+      qualifiedLeads: 8,
+      conversionRate: 12.5,
+      averageLeadScore: 72.5,
+      responseTime: 2.3,
+      totalRevenue: 4200,
+      averageSalePrice: 4200,
+      profitMargin: 0.15,
+      revenueGrowth: 0.25,
+      platformBreakdown: {
+        'facebook': { listings: 1, leads: 8, sales: 1, revenue: 4200, conversionRate: 12.5 },
+        'offerup': { listings: 1, leads: 4, sales: 0, revenue: 0, conversionRate: 0 },
+        'craigslist': { listings: 1, leads: 3, sales: 0, revenue: 0, conversionRate: 0 }
+      },
+      autoPostingSuccess: 95.5,
+      autoResponseSuccess: 88.2,
+      automationEfficiency: 91.8,
+      dailyStats: [
+        { date: '2025-01-01', listings: 1, leads: 3, sales: 0, revenue: 0 },
+        { date: '2025-01-02', listings: 1, leads: 2, sales: 0, revenue: 0 },
+        { date: '2025-01-03', listings: 1, leads: 4, sales: 1, revenue: 4200 }
+      ],
+      weeklyStats: [
+        { week: '2025-W01', listings: 3, leads: 9, sales: 1, revenue: 4200 }
+      ],
+      monthlyStats: [
+        { month: '2025-01', listings: 3, leads: 15, sales: 1, revenue: 4200 }
+      ],
+      lastUpdated: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      data: metrics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/analytics/insights', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const insights = await dbAll(`
+      SELECT * FROM optimization_insights 
+      WHERE user_id = ? 
+      ORDER BY confidence DESC, created_at DESC
+    `, [userId]);
+    
+    res.json({
+      success: true,
+      data: insights,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/analytics/insights', async (req, res) => {
+  try {
+    const { category, title, description, impact, confidence, suggestedAction, expectedImprovement, implementationEffort, userId = 'user-001' } = req.body;
+    const insightId = `insight-${Date.now()}`;
+    
+    await dbRun(`
+      INSERT INTO optimization_insights (id, user_id, category, title, description, impact, confidence, suggested_action, expected_improvement, implementation_effort, is_implemented)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+    `, [insightId, userId, category, title, description, impact, confidence, suggestedAction, expectedImprovement, implementationEffort]);
+    
+    const newInsight = await dbGet(`SELECT * FROM optimization_insights WHERE id = ?`, [insightId]);
+    
+    res.json({
+      success: true,
+      data: newInsight,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/analytics/report-templates', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const templates = await dbAll(`
+      SELECT * FROM report_templates 
+      WHERE user_id = ? 
+      ORDER BY created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      metrics: JSON.parse(template.metrics),
+      schedule: template.schedule ? JSON.parse(template.schedule) : null,
+      isActive: Boolean(template.is_active)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/analytics/reports/generate', async (req, res) => {
+  try {
+    const { templateId, timeRange } = req.body;
+    
+    // Simulate report generation
+    const reportUrl = `https://reports.pow3r.cashout/reports/${templateId}-${Date.now()}.pdf`;
+    
+    res.json({
+      success: true,
+      data: { url: reportUrl },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Lead Monitoring APIs
+app.get('/api/leads', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const leads = await dbAll(`
+      SELECT l.*, li.title as listing_title, li.platform as listing_platform
+      FROM leads l
+      LEFT JOIN listings li ON l.listing_id = li.id
+      WHERE l.user_id = ? 
+      ORDER BY l.created_at DESC
+    `, [userId]);
+    
+    const parsedLeads = leads.map(lead => ({
+      ...lead,
+      contactInfo: JSON.parse(lead.contact_info),
+      notes: lead.notes ? JSON.parse(lead.notes) : []
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedLeads,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/leads', async (req, res) => {
+  try {
+    const { listingId, platform, contactInfo, message, status, source, notes, userId = 'user-001' } = req.body;
+    const leadId = `lead-${Date.now()}`;
+    
+    await dbRun(`
+      INSERT INTO leads (id, listing_id, user_id, platform, contact_info, status, source, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [leadId, listingId, userId, platform, JSON.stringify(contactInfo), status || 'new', source, JSON.stringify(notes || [])]);
+    
+    const newLead = await dbGet(`SELECT * FROM leads WHERE id = ?`, [leadId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newLead,
+        contactInfo: JSON.parse(newLead.contact_info),
+        notes: newLead.notes ? JSON.parse(newLead.notes) : []
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.put('/api/leads/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const values = [];
+    
+    Object.keys(updates).forEach(key => {
+      if (key !== 'id' && updates[key] !== undefined) {
+        if (key === 'contactInfo' || key === 'notes') {
+          updateFields.push(`${key} = ?`);
+          values.push(JSON.stringify(updates[key]));
+        } else {
+          updateFields.push(`${key} = ?`);
+          values.push(updates[key]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    values.push(id);
+    await dbRun(`
+      UPDATE leads 
+      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, values);
+    
+    const updatedLead = await dbGet(`SELECT * FROM leads WHERE id = ?`, [id]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedLead,
+        contactInfo: JSON.parse(updatedLead.contact_info),
+        notes: updatedLead.notes ? JSON.parse(updatedLead.notes) : []
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/leads/metrics', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    
+    const metrics = {
+      totalLeads: 15,
+      newLeads: 8,
+      qualifiedLeads: 5,
+      conversionRate: 12.5,
+      averageResponseTime: 2.3,
+      highPriorityLeads: 3,
+      platformBreakdown: {
+        'facebook': 8,
+        'offerup': 4,
+        'craigslist': 3
+      },
+      lastUpdated: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      data: metrics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Negotiation APIs
+app.get('/api/negotiations', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const negotiations = await dbAll(`
+      SELECT n.*, l.contact_info as lead_contact, li.title as listing_title
+      FROM negotiation_sessions n
+      LEFT JOIN leads l ON n.lead_id = l.id
+      LEFT JOIN listings li ON n.listing_id = li.id
+      WHERE n.user_id = ? 
+      ORDER BY n.created_at DESC
+    `, [userId]);
+    
+    const parsedNegotiations = negotiations.map(negotiation => ({
+      ...negotiation,
+      offers: JSON.parse(negotiation.offers),
+      meetupScheduled: negotiation.meetup_scheduled ? JSON.parse(negotiation.meetup_scheduled) : null,
+      notes: negotiation.notes ? JSON.parse(negotiation.notes) : []
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedNegotiations,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/negotiations', async (req, res) => {
+  try {
+    const { leadId, listingId, initialPrice, targetPrice, userId = 'user-001' } = req.body;
+    const negotiationId = `negotiation-${Date.now()}`;
+    
+    await dbRun(`
+      INSERT INTO negotiation_sessions (id, user_id, lead_id, listing_id, initial_price, current_price, target_price, status, offers, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'active', '[]', '[]')
+    `, [negotiationId, userId, leadId, listingId, initialPrice, initialPrice, targetPrice]);
+    
+    const newNegotiation = await dbGet(`SELECT * FROM negotiation_sessions WHERE id = ?`, [negotiationId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newNegotiation,
+        offers: JSON.parse(newNegotiation.offers),
+        notes: JSON.parse(newNegotiation.notes)
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/negotiations/strategies', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const strategies = await dbAll(`
+      SELECT * FROM negotiation_strategies 
+      WHERE user_id = ? 
+      ORDER BY success_rate DESC, created_at DESC
+    `, [userId]);
+    
+    const parsedStrategies = strategies.map(strategy => ({
+      ...strategy,
+      conditions: JSON.parse(strategy.conditions),
+      tactics: JSON.parse(strategy.tactics),
+      isActive: Boolean(strategy.is_active)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedStrategies,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/negotiations/metrics', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    
+    const metrics = {
+      totalNegotiations: 8,
+      successfulNegotiations: 5,
+      averageNegotiationTime: 3.2,
+      averagePriceReduction: 8.5,
+      meetupConversionRate: 75.0,
+      paymentSuccessRate: 95.0,
+      strategyEffectiveness: {
+        'strategy-001': 0.78,
+        'strategy-002': 0.65,
+        'strategy-003': 0.82
+      },
+      lastUpdated: new Date().toISOString()
+    };
+    
+    res.json({
+      success: true,
+      data: metrics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Transaction APIs
+app.get('/api/transactions', async (req, res) => {
+  try {
+    const userId = req.query.userId || 'user-001';
+    const transactions = await dbAll(`
+      SELECT t.*, l.contact_info as lead_contact, li.title as listing_title
+      FROM sale_transactions t
+      LEFT JOIN leads l ON t.lead_id = l.id
+      LEFT JOIN listings li ON t.listing_id = li.id
+      WHERE t.user_id = ? 
+      ORDER BY t.created_at DESC
+    `, [userId]);
+    
+    const parsedTransactions = transactions.map(transaction => ({
+      ...transaction,
+      paymentDetails: JSON.parse(transaction.payment_details),
+      delivery: JSON.parse(transaction.delivery),
+      documentation: JSON.parse(transaction.documentation)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTransactions,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/transactions', async (req, res) => {
+  try {
+    const { negotiationId, leadId, listingId, finalPrice, paymentMethod, userId = 'user-001' } = req.body;
+    const transactionId = `transaction-${Date.now()}`;
+    
+    const paymentDetails = {
+      amount: finalPrice,
+      fees: 0,
+      netAmount: finalPrice,
+      currency: 'USD'
+    };
+    
+    const delivery = {
+      method: 'pickup'
+    };
+    
+    const documentation = {
+      receiptGenerated: false,
+      contractGenerated: false,
+      invoiceGenerated: false
+    };
+    
+    await dbRun(`
+      INSERT INTO sale_transactions (id, user_id, negotiation_id, lead_id, listing_id, final_price, payment_method, payment_status, payment_details, delivery, documentation, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, 'pending')
+    `, [transactionId, userId, negotiationId, leadId, listingId, finalPrice, paymentMethod, JSON.stringify(paymentDetails), JSON.stringify(delivery), JSON.stringify(documentation)]);
+    
+    const newTransaction = await dbGet(`SELECT * FROM sale_transactions WHERE id = ?`, [transactionId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTransaction,
+        paymentDetails: JSON.parse(newTransaction.payment_details),
+        delivery: JSON.parse(newTransaction.delivery),
+        documentation: JSON.parse(newTransaction.documentation)
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// New Post Flow APIs
+
+// 1. Enter Item - Search and Analysis
+app.post('/api/post-flow/search-item', async (req, res) => {
+  try {
+    const { itemName, category, userId = 'user-001' } = req.body;
+    
+    // Simulate Abacus Deep Agent analysis
+    const analysisResults = {
+      marketAnalysis: {
+        averagePrice: Math.floor(Math.random() * 2000) + 2000,
+        priceRange: [Math.floor(Math.random() * 1000) + 1500, Math.floor(Math.random() * 2000) + 3000],
+        competitionLevel: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
+        demandScore: Math.random() * 10,
+        marketTrend: ['increasing', 'stable', 'decreasing'][Math.floor(Math.random() * 3)]
+      },
+      pricingInsights: {
+        optimalPrice: Math.floor(Math.random() * 2000) + 2000,
+        quickSalePrice: Math.floor(Math.random() * 1500) + 1500,
+        premiumPrice: Math.floor(Math.random() * 2500) + 3000,
+        priceFactors: ['condition', 'brand', 'location', 'seasonality']
+      },
+      contentInsights: {
+        topKeywords: ['excellent condition', 'great deal', 'must sell', 'serious inquiries'],
+        bestPerformingTitles: [`${itemName} - Excellent Condition`, `${itemName} - Great Deal!`],
+        optimalPostingTimes: ['morning', 'evening'],
+        platformSpecificTips: {
+          facebook: 'Use emotional appeal and local community focus',
+          offerup: 'Emphasize convenience and quick sale',
+          craigslist: 'Be direct and include all details'
+        }
+      },
+      recommendations: [
+        'Emphasize excellent condition',
+        'Include multiple high-quality photos',
+        'Highlight any unique features',
+        'Set competitive pricing for quick sale'
+      ]
+    };
+    
+    // Save research results
+    const researchId = `research-${Date.now()}`;
+    await dbRun(`
+      INSERT INTO abacus_research (id, user_id, item_name, search_query, research_type, results, confidence_score, data_sources)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [researchId, userId, itemName, `${itemName} ${category} market analysis`, 'full_analysis', JSON.stringify(analysisResults), 0.85 + Math.random() * 0.15, JSON.stringify(['facebook_marketplace', 'offerup', 'craigslist', 'google_trends'])]);
+    
+    res.json({
+      success: true,
+      data: {
+        researchId,
+        itemName,
+        category,
+        analysis: analysisResults,
+        confidenceScore: 0.85 + Math.random() * 0.15,
+        timestamp: new Date().toISOString()
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 2. Create Post - Project Management
+app.post('/api/post-flow/create-project', async (req, res) => {
+  try {
+    const { 
+      name, 
+      description, 
+      itemName, 
+      itemCategory, 
+      itemCondition, 
+      itemDescription, 
+      platforms, 
+      tags, 
+      researchId,
+      userId = 'user-001' 
+    } = req.body;
+    
+    const projectId = `project-${Date.now()}`;
+    
+    // Get research data if provided
+    let researchData = null;
+    if (researchId) {
+      const research = await dbGet(`SELECT * FROM abacus_research WHERE id = ?`, [researchId]);
+      if (research) {
+        researchData = JSON.parse(research.results);
+      }
+    }
+    
+    await dbRun(`
+      INSERT INTO post_projects (id, user_id, name, description, item_name, item_category, item_condition, item_description, status, platforms, tags, research_data)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, ?)
+    `, [projectId, userId, name, description, itemName, itemCategory, itemCondition, itemDescription, JSON.stringify(platforms || []), JSON.stringify(tags || []), JSON.stringify(researchData)]);
+    
+    // Add to garage
+    await dbRun(`
+      INSERT INTO garage_items (id, user_id, item_type, item_name, item_data, category, tags, platform, status, priority)
+      VALUES (?, ?, 'project', ?, ?, ?, ?, 'multi', 'active', 1)
+    `, [`garage-${Date.now()}`, userId, name, JSON.stringify({projectId, status: 'draft', lastActivity: new Date().toISOString()}), itemCategory, JSON.stringify(tags || [])]);
+    
+    const newProject = await dbGet(`SELECT * FROM post_projects WHERE id = ?`, [projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newProject,
+        platforms: JSON.parse(newProject.platforms),
+        tags: JSON.parse(newProject.tags),
+        researchData: newProject.research_data ? JSON.parse(newProject.research_data) : null
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 3. Deep Research (Abacus Deep Agent)
+app.post('/api/post-flow/deep-research', async (req, res) => {
+  try {
+    const { projectId, researchType = 'full_analysis', userId = 'user-001' } = req.body;
+    
+    // Get project details
+    const project = await dbGet(`SELECT * FROM post_projects WHERE id = ? AND user_id = ?`, [projectId, userId]);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    // Simulate Abacus Deep Agent research
+    const deepResearch = {
+      marketIntelligence: {
+        competitorAnalysis: {
+          topCompetitors: [
+            { name: 'Similar Item A', price: 4200, features: ['Energy efficient', 'Professional grade'], rating: 4.5 },
+            { name: 'Similar Item B', price: 3800, features: ['Good condition', 'Quick sale'], rating: 4.2 }
+          ],
+          marketGaps: ['Professional installation not mentioned', 'Warranty details missing'],
+          opportunities: ['Emphasize professional installation', 'Highlight warranty coverage']
+        },
+        pricingStrategy: {
+          recommendedPrice: 4200,
+          priceJustification: 'Based on condition, features, and market demand',
+          dynamicPricing: {
+            highDemand: 4500,
+            normalDemand: 4200,
+            quickSale: 3800
+          },
+          psychologicalPricing: ['$4,199', '$4,200', '$4,250']
+        },
+        contentStrategy: {
+          headlineVariations: [
+            'Professional AC Unit - Energy Efficient!',
+            'AC System - Great Deal!',
+            'Premium AC Unit - Warranty Included'
+          ],
+          keyMessages: [
+            'Energy efficient and cost-effective',
+            'Professional installation available',
+            'Warranty included for peace of mind'
+          ],
+          callToActionOptions: [
+            'Contact for installation quote',
+            'Serious inquiries only',
+            'Available for immediate pickup'
+          ]
+        }
+      },
+      platformOptimization: {
+        facebook: {
+          optimalPostingTime: '9:00 AM - 11:00 AM',
+          hashtags: ['#AC', '#HVAC', '#EnergyEfficient', '#Professional'],
+          contentLength: '150-200 characters',
+          imageCount: '3-5 images'
+        },
+        offerup: {
+          optimalPostingTime: '6:00 PM - 8:00 PM',
+          keywords: ['excellent condition', 'great deal', 'must sell'],
+          contentLength: '100-150 characters',
+          imageCount: '2-4 images'
+        },
+        craigslist: {
+          optimalPostingTime: '7:00 AM - 9:00 AM',
+          keywords: ['professional', 'warranty', 'installation'],
+          contentLength: '200-300 characters',
+          imageCount: '4-6 images'
+        }
+      },
+      performancePredictions: {
+        expectedViews: { facebook: 150, offerup: 80, craigslist: 120 },
+        expectedEngagement: { facebook: 0.12, offerup: 0.08, craigslist: 0.06 },
+        expectedLeads: { facebook: 8, offerup: 4, craigslist: 6 },
+        conversionProbability: 0.15
+      }
+    };
+    
+    // Save deep research
+    const researchId = `research-${Date.now()}`;
+    await dbRun(`
+      INSERT INTO abacus_research (id, user_id, project_id, item_name, search_query, research_type, results, confidence_score, data_sources)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [researchId, userId, projectId, project.item_name, `${project.item_name} deep market analysis`, researchType, JSON.stringify(deepResearch), 0.92, JSON.stringify(['abacus_deep_agent', 'market_intelligence', 'competitor_analysis'])]);
+    
+    // Update project with research data
+    await dbRun(`
+      UPDATE post_projects 
+      SET research_data = ?, status = 'research', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [JSON.stringify(deepResearch), projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        researchId,
+        projectId,
+        research: deepResearch,
+        confidenceScore: 0.92,
+        timestamp: new Date().toISOString()
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 4. Generate Content
+app.post('/api/post-flow/generate-content', async (req, res) => {
+  try {
+    const { projectId, platforms, userId = 'user-001' } = req.body;
+    
+    // Get project and research data
+    const project = await dbGet(`SELECT * FROM post_projects WHERE id = ? AND user_id = ?`, [projectId, userId]);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    const researchData = project.research_data ? JSON.parse(project.research_data) : null;
+    
+    // Generate platform-specific content
+    const generatedContent = {};
+    const selectedPlatforms = platforms || JSON.parse(project.platforms || '[]');
+    
+    selectedPlatforms.forEach(platform => {
+      const platformData = researchData?.platformOptimization?.[platform] || {};
+      
+      switch (platform) {
+        case 'facebook':
+          generatedContent[platform] = `${project.item_name} - Energy Efficient! Perfect for home or office. Includes professional installation and warranty. $4,200 OBO. Contact for details! #AC #HVAC #EnergyEfficient`;
+          break;
+        case 'offerup':
+          generatedContent[platform] = `${project.item_name} - Great Deal! High-efficiency unit, excellent condition. $4,200. Ready for installation.`;
+          break;
+        case 'craigslist':
+          generatedContent[platform] = `${project.item_name} - Energy Efficient. Professional grade, warranty included. $4,200. Serious inquiries only.`;
+          break;
+        default:
+          generatedContent[platform] = `${project.item_name} - Excellent condition. $4,200. Contact for details.`;
+      }
+    });
+    
+    // Update project with generated content
+    await dbRun(`
+      UPDATE post_projects 
+      SET generated_content = ?, status = 'writing', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [JSON.stringify(generatedContent), projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        projectId,
+        generatedContent,
+        platforms: selectedPlatforms,
+        timestamp: new Date().toISOString()
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 5. Image Processing (CloudFlare Integration)
+app.post('/api/post-flow/process-images', async (req, res) => {
+  try {
+    const { projectId, images = [], userId = 'user-001', itemName, platforms } = req.body;
+    
+    // If no images provided, generate some sample images
+    const imagesToProcess = images.length > 0 ? images : [
+      {
+        url: '/images/ac-main-unit.png',
+        width: 1200,
+        height: 800,
+        fileSize: 245760,
+        tags: ['main', 'unit', 'professional']
+      },
+      {
+        url: '/images/ac-remote.jpeg',
+        width: 800,
+        height: 600,
+        fileSize: 156789,
+        tags: ['remote', 'control']
+      },
+      {
+        url: '/images/ac-installation.jpeg',
+        width: 1000,
+        height: 750,
+        fileSize: 189234,
+        tags: ['installation', 'professional']
+      }
+    ];
+    
+    // Simulate CloudFlare image processing
+    const processedImages = imagesToProcess.map((image, index) => {
+      const imageId = `img-${Date.now()}-${index}`;
+      return {
+        id: imageId,
+        originalUrl: image.url,
+        cloudflareUrl: `https://cloudflare.pow3r.cashout/images/${imageId}.jpg`,
+        thumbnailUrl: `https://cloudflare.pow3r.cashout/thumbnails/${imageId}_thumb.jpg`,
+        optimizedUrl: `https://cloudflare.pow3r.cashout/optimized/${imageId}_opt.jpg`,
+        metadata: {
+          width: image.width || 1200,
+          height: image.height || 800,
+          fileSize: image.fileSize || 245760,
+          format: 'jpg',
+          processedAt: new Date().toISOString()
+        },
+        tags: image.tags || [],
+        isFavorite: false,
+        usageCount: 0
+      };
+    });
+    
+    // Save images to gallery
+    for (const image of processedImages) {
+      await dbRun(`
+        INSERT INTO image_gallery (id, user_id, project_id, filename, original_url, cloudflare_url, thumbnail_url, image_type, metadata, tags, is_favorite, usage_count)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'original', ?, ?, ?, ?)
+      `, [image.id, userId, projectId, `image-${image.id}.jpg`, image.originalUrl, image.cloudflareUrl, image.thumbnailUrl, JSON.stringify(image.metadata), JSON.stringify(image.tags), image.isFavorite, image.usageCount]);
+    }
+    
+    // Update project with processed images
+    await dbRun(`
+      UPDATE post_projects 
+      SET images = ?, status = 'images', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [JSON.stringify(processedImages), projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        projectId,
+        processedImages,
+        totalImages: processedImages.length,
+        timestamp: new Date().toISOString()
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 6. Customize Project
+app.put('/api/post-flow/customize/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { customizations, userId = 'user-001' } = req.body;
+    
+    // Update project customizations
+    await dbRun(`
+      UPDATE post_projects 
+      SET customizations = ?, status = 'customize', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND user_id = ?
+    `, [JSON.stringify(customizations), projectId, userId]);
+    
+    const updatedProject = await dbGet(`SELECT * FROM post_projects WHERE id = ?`, [projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedProject,
+        platforms: JSON.parse(updatedProject.platforms),
+        tags: JSON.parse(updatedProject.tags),
+        customizations: JSON.parse(updatedProject.customizations || '{}')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 7. Confirm and Post
+app.post('/api/post-flow/confirm-post', async (req, res) => {
+  try {
+    const { projectId, postingSchedule, userId = 'user-001' } = req.body;
+    
+    // Get project details
+    const project = await dbGet(`SELECT * FROM post_projects WHERE id = ? AND user_id = ?`, [projectId, userId]);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    const generatedContent = JSON.parse(project.generated_content || '{}');
+    const platforms = JSON.parse(project.platforms || '[]');
+    
+    // Create post history entries
+    const postHistory = [];
+    for (const platform of platforms) {
+      const postId = `post-${Date.now()}-${platform}`;
+      const scheduledTime = postingSchedule?.[platform] || new Date(Date.now() + 60000).toISOString(); // 1 minute from now
+      
+      await dbRun(`
+        INSERT INTO post_history (id, user_id, project_id, platform, post_content, images, posting_strategy, status, scheduled_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'scheduled', ?)
+      `, [postId, userId, projectId, platform, generatedContent[platform] || '', JSON.stringify(JSON.parse(project.images || '[]')), JSON.stringify({tone: 'professional'}), scheduledTime]);
+      
+      postHistory.push({
+        id: postId,
+        platform,
+        content: generatedContent[platform] || '',
+        scheduledAt: scheduledTime,
+        status: 'scheduled'
+      });
+    }
+    
+    // Update project status
+    await dbRun(`
+      UPDATE post_projects 
+      SET posting_schedule = ?, status = 'confirm', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [JSON.stringify(postingSchedule || {}), projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        projectId,
+        postHistory,
+        totalPosts: postHistory.length,
+        scheduledPlatforms: platforms,
+        timestamp: new Date().toISOString()
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 8. Garage Management APIs
+app.get('/api/garage', async (req, res) => {
+  try {
+    const { 
+      userId = 'user-001', 
+      itemType, 
+      category, 
+      status, 
+      platform, 
+      tags, 
+      sortBy = 'last_accessed', 
+      sortOrder = 'DESC',
+      limit = 50,
+      offset = 0
+    } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (itemType) {
+      whereConditions.push('item_type = ?');
+      params.push(itemType);
+    }
+    
+    if (category) {
+      whereConditions.push('category = ?');
+      params.push(category);
+    }
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    
+    if (platform) {
+      whereConditions.push('platform = ?');
+      params.push(platform);
+    }
+    
+    if (tags) {
+      whereConditions.push('tags LIKE ?');
+      params.push(`%${tags}%`);
+    }
+    
+    const items = await dbAll(`
+      SELECT * FROM garage_items 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY ${sortBy} ${sortOrder}
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedItems = items.map(item => ({
+      ...item,
+      itemData: JSON.parse(item.item_data),
+      tags: JSON.parse(item.tags || '[]'),
+      isFavorite: Boolean(item.is_favorite)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedItems,
+      total: parsedItems.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 9. Image Gallery APIs
+app.get('/api/gallery', async (req, res) => {
+  try {
+    const { userId = 'user-001', projectId, tags, isFavorite, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (projectId) {
+      whereConditions.push('project_id = ?');
+      params.push(projectId);
+    }
+    
+    if (tags) {
+      whereConditions.push('tags LIKE ?');
+      params.push(`%${tags}%`);
+    }
+    
+    if (isFavorite !== undefined) {
+      whereConditions.push('is_favorite = ?');
+      params.push(isFavorite === 'true' ? 1 : 0);
+    }
+    
+    const images = await dbAll(`
+      SELECT * FROM image_gallery 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedImages = images.map(image => ({
+      ...image,
+      metadata: JSON.parse(image.metadata || '{}'),
+      tags: JSON.parse(image.tags || '[]'),
+      isFavorite: Boolean(image.is_favorite)
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedImages,
+      total: parsedImages.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 10. Post History APIs
+app.get('/api/post-history', async (req, res) => {
+  try {
+    const { userId = 'user-001', projectId, platform, status, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (projectId) {
+      whereConditions.push('project_id = ?');
+      params.push(projectId);
+    }
+    
+    if (platform) {
+      whereConditions.push('platform = ?');
+      params.push(platform);
+    }
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    
+    const posts = await dbAll(`
+      SELECT ph.*, pp.name as project_name, pp.item_name
+      FROM post_history ph
+      LEFT JOIN post_projects pp ON ph.project_id = pp.id
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY ph.created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedPosts = posts.map(post => ({
+      ...post,
+      images: JSON.parse(post.images || '[]'),
+      postingStrategy: JSON.parse(post.posting_strategy || '{}'),
+      performanceData: post.performance_data ? JSON.parse(post.performance_data) : null
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedPosts,
+      total: parsedPosts.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 11. Post Projects Management APIs
+app.get('/api/post-projects', async (req, res) => {
+  try {
+    const { userId = 'user-001', status, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    
+    const projects = await dbAll(`
+      SELECT * FROM post_projects 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedProjects = projects.map(project => ({
+      ...project,
+      platforms: JSON.parse(project.platforms || '[]'),
+      content: JSON.parse(project.content || '{}'),
+      images: JSON.parse(project.images || '[]'),
+      research: project.research ? JSON.parse(project.research) : null,
+      postingSchedule: project.posting_schedule ? JSON.parse(project.posting_schedule) : null
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedProjects,
+      total: parsedProjects.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/post-projects/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    const project = await dbGet(`
+      SELECT * FROM post_projects 
+      WHERE id = ? AND user_id = ?
+    `, [projectId, userId]);
+    
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    const parsedProject = {
+      ...project,
+      platforms: JSON.parse(project.platforms || '[]'),
+      content: JSON.parse(project.content || '{}'),
+      images: JSON.parse(project.images || '[]'),
+      research: project.research ? JSON.parse(project.research) : null,
+      postingSchedule: project.posting_schedule ? JSON.parse(project.posting_schedule) : null
+    };
+    
+    res.json({
+      success: true,
+      data: parsedProject,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.put('/api/post-projects/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    // Build dynamic update query
+    const updateFields = [];
+    const updateValues = [];
+    
+    if (updates.name) {
+      updateFields.push('name = ?');
+      updateValues.push(updates.name);
+    }
+    
+    if (updates.description) {
+      updateFields.push('description = ?');
+      updateValues.push(updates.description);
+    }
+    
+    if (updates.platforms) {
+      updateFields.push('platforms = ?');
+      updateValues.push(JSON.stringify(updates.platforms));
+    }
+    
+    if (updates.content) {
+      updateFields.push('content = ?');
+      updateValues.push(JSON.stringify(updates.content));
+    }
+    
+    if (updates.images) {
+      updateFields.push('images = ?');
+      updateValues.push(JSON.stringify(updates.images));
+    }
+    
+    if (updates.research) {
+      updateFields.push('research = ?');
+      updateValues.push(JSON.stringify(updates.research));
+    }
+    
+    if (updates.status) {
+      updateFields.push('status = ?');
+      updateValues.push(updates.status);
+    }
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(projectId, userId);
+    
+    await dbRun(`
+      UPDATE post_projects 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND user_id = ?
+    `, updateValues);
+    
+    // Get updated project
+    const updatedProject = await dbGet(`
+      SELECT * FROM post_projects 
+      WHERE id = ? AND user_id = ?
+    `, [projectId, userId]);
+    
+    const parsedProject = {
+      ...updatedProject,
+      platforms: JSON.parse(updatedProject.platforms || '[]'),
+      content: JSON.parse(updatedProject.content || '{}'),
+      images: JSON.parse(updatedProject.images || '[]'),
+      research: updatedProject.research ? JSON.parse(updatedProject.research) : null,
+      postingSchedule: updatedProject.posting_schedule ? JSON.parse(updatedProject.posting_schedule) : null
+    };
+    
+    res.json({
+      success: true,
+      data: parsedProject,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.delete('/api/post-projects/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    // Check if project exists
+    const project = await dbGet(`
+      SELECT id FROM post_projects 
+      WHERE id = ? AND user_id = ?
+    `, [projectId, userId]);
+    
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    // Delete project
+    await dbRun(`
+      DELETE FROM post_projects 
+      WHERE id = ? AND user_id = ?
+    `, [projectId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, projectId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 12. Abacus Research APIs
+app.get('/api/abacus-research/:researchId', async (req, res) => {
+  try {
+    const { researchId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    const research = await dbGet(`
+      SELECT * FROM abacus_research 
+      WHERE id = ? AND user_id = ?
+    `, [researchId, userId]);
+    
+    if (!research) {
+      return res.status(404).json({
+        success: false,
+        error: 'Research not found'
+      });
+    }
+    
+    const parsedResearch = {
+      ...research,
+      results: JSON.parse(research.results || '{}'),
+      dataSources: JSON.parse(research.data_sources || '[]')
+    };
+    
+    res.json({
+      success: true,
+      data: parsedResearch,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/abacus-research', async (req, res) => {
+  try {
+    const { userId = 'user-001', projectId, researchType, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (projectId) {
+      whereConditions.push('project_id = ?');
+      params.push(projectId);
+    }
+    
+    if (researchType) {
+      whereConditions.push('research_type = ?');
+      params.push(researchType);
+    }
+    
+    const research = await dbAll(`
+      SELECT * FROM abacus_research 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedResearch = research.map(item => ({
+      ...item,
+      results: JSON.parse(item.results || '{}'),
+      dataSources: JSON.parse(item.data_sources || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedResearch,
+      total: parsedResearch.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 13. Cloudflare Integration APIs
+app.post('/api/cloudflare/upload', async (req, res) => {
+  try {
+    const { userId = 'user-001', projectId, imageData, metadata } = req.body;
+    
+    if (!imageData) {
+      return res.status(400).json({
+        success: false,
+        error: 'Image data is required'
+      });
+    }
+    
+    const imageId = `img-${Date.now()}`;
+    const filename = `image-${imageId}.jpg`;
+    
+    // Simulate Cloudflare upload
+    const cloudflareUrl = `https://cloudflare.pow3r.cashout/images/${filename}`;
+    const thumbnailUrl = `https://cloudflare.pow3r.cashout/thumbnails/${imageId}_thumb.jpg`;
+    const optimizedUrl = `https://cloudflare.pow3r.cashout/optimized/${imageId}_opt.jpg`;
+    
+    // Store in database
+    await dbRun(`
+      INSERT INTO image_gallery (id, user_id, project_id, filename, original_url, cloudflare_url, thumbnail_url, image_type, metadata, tags, is_favorite, usage_count)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      imageId, 
+      userId, 
+      projectId, 
+      filename, 
+      imageData.originalUrl || cloudflareUrl, 
+      cloudflareUrl, 
+      thumbnailUrl, 
+      'uploaded', 
+      JSON.stringify(metadata || {}), 
+      JSON.stringify(metadata?.tags || []), 
+      0, 
+      0
+    ]);
+    
+    res.json({
+      success: true,
+      data: {
+        imageId,
+        filename,
+        originalUrl: imageData.originalUrl || cloudflareUrl,
+        cloudflareUrl,
+        thumbnailUrl,
+        optimizedUrl,
+        metadata: metadata || {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/cloudflare/optimize/:imageId', async (req, res) => {
+  try {
+    const { imageId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const { options = {} } = req.body;
+    
+    // Get image from database
+    const image = await dbGet(`
+      SELECT * FROM image_gallery 
+      WHERE id = ? AND user_id = ?
+    `, [imageId, userId]);
+    
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        error: 'Image not found'
+      });
+    }
+    
+    // Simulate optimization
+    const optimizedUrl = `https://cloudflare.pow3r.cashout/optimized/${imageId}_opt.jpg`;
+    const optimizedMetadata = {
+      ...JSON.parse(image.metadata || '{}'),
+      optimized: true,
+      optimizationOptions: options,
+      optimizedAt: new Date().toISOString()
+    };
+    
+    // Update image record
+    await dbRun(`
+      UPDATE image_gallery 
+      SET metadata = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND user_id = ?
+    `, [JSON.stringify(optimizedMetadata), imageId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        imageId,
+        originalUrl: image.cloudflare_url,
+        optimizedUrl,
+        metadata: optimizedMetadata
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/cloudflare/variants/:imageId', async (req, res) => {
+  try {
+    const { imageId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const { variants = [] } = req.body;
+    
+    // Get image from database
+    const image = await dbGet(`
+      SELECT * FROM image_gallery 
+      WHERE id = ? AND user_id = ?
+    `, [imageId, userId]);
+    
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        error: 'Image not found'
+      });
+    }
+    
+    // Generate variants
+    const generatedVariants = variants.map((variant, index) => ({
+      id: `${imageId}-variant-${index}`,
+      type: variant.type || 'resize',
+      width: variant.width || 800,
+      height: variant.height || 600,
+      quality: variant.quality || 85,
+      url: `https://cloudflare.pow3r.cashout/variants/${imageId}_${variant.type || 'resize'}_${index}.jpg`,
+      metadata: {
+        originalImageId: imageId,
+        variantType: variant.type || 'resize',
+        generatedAt: new Date().toISOString()
+      }
+    }));
+    
+    res.json({
+      success: true,
+      data: {
+        imageId,
+        originalUrl: image.cloudflare_url,
+        variants: generatedVariants
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ 
@@ -467,5 +2596,9 @@ app.listen(PORT, () => {
   console.log(`📊 Dashboard API: http://localhost:${PORT}/api/dashboard`);
   console.log(`📝 Listings API: http://localhost:${PORT}/api/listings`);
   console.log(`🤖 Auto-Response API: http://localhost:${PORT}/api/auto-responses`);
+  console.log(`✨ New Post Flow API: http://localhost:${PORT}/api/post-flow/*`);
+  console.log(`🏠 Garage API: http://localhost:${PORT}/api/garage`);
+  console.log(`🔬 Abacus Research API: http://localhost:${PORT}/api/abacus-research/*`);
+  console.log(`☁️  Cloudflare API: http://localhost:${PORT}/api/cloudflare/*`);
   console.log(`💾 Database: ${dbPath}`);
 });
