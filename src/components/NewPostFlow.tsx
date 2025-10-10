@@ -799,10 +799,10 @@ export function NewPostFlow() {
         </div>
       </motion.div>
     );
-  };
+  }, [itemName, selectedPlatforms, selectedContent, selectedImages, posting, confirmPost, setCurrentStep, toast]);
 
   // Step 5: Garage
-  const Step5Garage = () => {
+  const Step5Garage = useCallback(() => {
     // Filter items based on current filters
     const filteredItems = garageItems.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(garageFilters.search.toLowerCase());
