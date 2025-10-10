@@ -21,6 +21,7 @@ import { useDashboardStore } from '@/lib/stores/dashboard.store'
 
 // Dashboard Components Library - Core components only
 import { DashboardOverview } from '@/components/dashboard-overview'
+import { NewPostFlow } from '@/components/NewPostFlow'
 // Note: Other components will be added back once they're updated to use Redux UI
 // import { ListingManagement } from '@/components/listing-management'
 // import { AutoResponderManager } from '@/components/auto-responder-manager'
@@ -53,7 +54,8 @@ import {
   UserCheck,
   Bot,
   Package,
-  Zap
+  Zap,
+  Plus
 } from 'lucide-react'
 
 function Dashboard() {
@@ -119,15 +121,23 @@ function Dashboard() {
       {/* Main Content with Navigation */}
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-1">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Home className="w-4 h-4" />
               <span>Dashboard Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="new-post" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              <span>New Post Flow</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             <DashboardOverview />
+          </TabsContent>
+
+          <TabsContent value="new-post" className="space-y-6">
+            <NewPostFlow />
           </TabsContent>
         </Tabs>
       </div>

@@ -14,6 +14,12 @@ A modern, automated dashboard for managing marketplace listings built with Vite,
 - 🤖 Automated response management
 - 📱 Mobile-first responsive design
 - 🔒 Secure authentication
+- ✨ **New Post Flow**: Step-by-step workflow for creating posts across multiple platforms with AI assistance
+
+## Documentation
+
+- [New Post Flow Workflow](README-NewPostFlow.md) - Comprehensive guide to the new post creation workflow
+- [API Integration Guide](API_INTEGRATION_GUIDE.md) - Complete API integration documentation and testing guide
 
 ## Getting Started
 
