@@ -14,8 +14,11 @@ export interface DashboardCardProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 export const DashboardCard = React.forwardRef<HTMLDivElement, DashboardCardProps>(
-  ({ className, title, description, children, ...props }, ref) => (
-    <Card ref={ref} className={cn('h-full', className)} {...props}>
+  ({ className, title, description, children, ...props }, ref) => {
+    // Filter out incompatible props
+    const { color, ...cardProps } = props as any;
+    return (
+    <Card ref={ref} className={cn('h-full', className)} {...cardProps}>
       {(title || description) && (
         <CardHeader>
           {title && <CardTitle>{title}</CardTitle>}
@@ -26,7 +29,8 @@ export const DashboardCard = React.forwardRef<HTMLDivElement, DashboardCardProps
         {children}
       </CardContent>
     </Card>
-  )
+    );
+  }
 );
 
 DashboardCard.displayName = 'DashboardCard';

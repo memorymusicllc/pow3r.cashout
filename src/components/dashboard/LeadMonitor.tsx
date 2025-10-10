@@ -168,7 +168,7 @@ export function LeadMonitor() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{Math.round(metrics.averageLeadScore || 0)}</div>
+            <div className="text-2xl font-bold">{Math.round(metrics.conversionRate || 0)}%</div>
             <p className="text-xs text-muted-foreground">
               Average score
             </p>

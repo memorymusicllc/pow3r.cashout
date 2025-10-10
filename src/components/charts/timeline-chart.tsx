@@ -39,10 +39,37 @@ export function TimelineChart({
   className = ""
 }: TimelineChartProps) {
   // Fallback data if none provided
-  const chartEvents = events && events.length > 0 ? events : [
-    { id: '1', title: 'Event 1', date: '2024-01-01', type: 'milestone', description: 'First milestone' },
-    { id: '2', title: 'Event 2', date: '2024-02-01', type: 'task', description: 'Important task' },
-    { id: '3', title: 'Event 3', date: '2024-03-01', type: 'milestone', description: 'Second milestone' }
+  const chartEvents: TimelineEvent[] = events && events.length > 0 ? events : [
+    { 
+      id: '1', 
+      title: 'Event 1', 
+      date: new Date('2024-01-01'), 
+      type: 'milestone', 
+      description: 'First milestone',
+      color: '#3b82f6',
+      importance: 'high',
+      category: 'milestone'
+    },
+    { 
+      id: '2', 
+      title: 'Event 2', 
+      date: new Date('2024-02-01'), 
+      type: 'event', 
+      description: 'Important task',
+      color: '#10b981',
+      importance: 'medium',
+      category: 'task'
+    },
+    { 
+      id: '3', 
+      title: 'Event 3', 
+      date: new Date('2024-03-01'), 
+      type: 'milestone', 
+      description: 'Second milestone',
+      color: '#f59e0b',
+      importance: 'high',
+      category: 'milestone'
+    }
   ];
   
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)

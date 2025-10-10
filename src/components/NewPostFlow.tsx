@@ -349,14 +349,12 @@ export function NewPostFlow() {
 
   // Step 2: Create Post
   const handlePlatformToggle = useCallback((platformId: string) => {
-    setSelectedPlatforms(prev => {
-      if (prev.includes(platformId)) {
-        return prev.filter((id: string) => id !== platformId);
-      } else {
-        return [...prev, platformId];
-      }
-    });
-  }, [setSelectedPlatforms]);
+    if (selectedPlatforms.includes(platformId)) {
+      setSelectedPlatforms(selectedPlatforms.filter((id: string) => id !== platformId));
+    } else {
+      setSelectedPlatforms([...selectedPlatforms, platformId]);
+    }
+  }, [selectedPlatforms, setSelectedPlatforms]);
 
   const handleDeepResearch = useCallback(async () => {
     try {
@@ -572,10 +570,10 @@ export function NewPostFlow() {
         </div>
       </motion.div>
     );
-  };
+  }, [selectedImages, selectedContent, setCurrentStep]);
 
   // Step 3: Customize
-  const Step3Customize = () => {
+  const Step3Customize = useCallback(() => {
     return (
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -699,7 +697,8 @@ export function NewPostFlow() {
         </div>
       </motion.div>
     );
-  }, [itemName, selectedPlatforms, selectedContent, selectedImages, generating, handlePlatformToggle, handleDeepResearch, handleGenerateContent, handleGenerateImages, setCurrentStep]);
+  }, [selectedImages, selectedContent, setCurrentStep]);
+
 
   // Step 4: Confirm
   const Step4Confirm = useCallback(() => {
@@ -992,7 +991,7 @@ export function NewPostFlow() {
         </div>
       </motion.div>
     );
-  };
+  }, [garageItems, garageFilters, loading, setGarageFilters, fetchGarageItems, updateGarageItem, deleteGarageItem, setCurrentStep]);
 
   return (
     <div className="min-h-screen bg-background">

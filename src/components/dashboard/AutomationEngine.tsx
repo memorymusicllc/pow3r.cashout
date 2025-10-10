@@ -71,7 +71,14 @@ export function AutomationEngine() {
         'Alternative description',
         'Updated pricing focus'
       ],
-      rotationInterval: 24
+      rotationInterval: 24,
+      currentIndex: 0,
+      lastRotation: new Date().toISOString(),
+      performance: {
+        views: 0,
+        inquiries: 0,
+        conversions: 0
+      }
     }
     await createContentRotation(newRotation)
   }

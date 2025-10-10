@@ -154,18 +154,20 @@ export function BloomGraphChart({
               style={{ background: 'hsl(var(--background))' }}
             >
               {/* Connections */}
-              {connections.map((conn, index) => (
-                <line
-                  key={index}
-                  x1={conn.x1}
-                  y1={conn.y1}
-                  x2={conn.x2}
-                  y2={conn.y2}
-                  stroke={conn.color}
-                  strokeWidth={Math.max(1, conn.weight / 10)}
-                  opacity={0.6}
-                />
-              ))}
+              {connections.map((conn, index) => 
+                conn ? (
+                  <line
+                    key={index}
+                    x1={conn.x1}
+                    y1={conn.y1}
+                    x2={conn.x2}
+                    y2={conn.y2}
+                    stroke={conn.color}
+                    strokeWidth={Math.max(1, conn.weight / 10)}
+                    opacity={0.6}
+                  />
+                ) : null
+              )}
 
               {/* Nodes */}
               {positionedNodes.map((node, index) => {
@@ -186,7 +188,7 @@ export function BloomGraphChart({
                     />
                     <text
                       x={node.x}
-                      y={node.y + 4}
+                      y={(node.y || 0) + 4}
                       textAnchor="middle"
                       className="text-xs font-medium fill-foreground pointer-events-none"
                       style={{ 

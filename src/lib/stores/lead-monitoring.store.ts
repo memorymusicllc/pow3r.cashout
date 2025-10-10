@@ -133,6 +133,9 @@ interface LeadMonitoringState {
   // Real-time
   startRealTimeUpdates: () => void
   stopRealTimeUpdates: () => void
+  
+  // Helper functions
+  checkNotificationRules: (lead: any) => void
 }
 
 export const useLeadMonitoringStore = create<LeadMonitoringState>((set, get) => ({
@@ -181,7 +184,7 @@ export const useLeadMonitoringStore = create<LeadMonitoringState>((set, get) => 
   fetchLeads: async () => {
     set({ loading: true })
     try {
-      const response = await api.getLeads()
+      const response = await api.getLeads('default-seller')
       set({ 
         leads: Array.isArray(response.data) ? response.data : [],
         loading: false,
@@ -399,7 +402,7 @@ export const useLeadMonitoringStore = create<LeadMonitoringState>((set, get) => 
   },
 
   // Helper function for notifications
-  checkNotificationRules: (lead) => {
+  checkNotificationRules: (lead: any) => {
     const { notificationRules } = get()
     const activeRules = notificationRules.filter(rule => rule.isActive)
     

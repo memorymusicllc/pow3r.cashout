@@ -328,7 +328,7 @@ export const api = {
   },
 
   async implementOptimizationInsight(id: string) {
-    return apiClient.put<any>(`/api/analytics/insights/${id}/implement`);
+    return apiClient.put<any>(`/api/analytics/insights/${id}/implement`, {});
   },
 
   async dismissOptimizationInsight(id: string) {

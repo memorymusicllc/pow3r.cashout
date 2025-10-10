@@ -74,8 +74,8 @@ export function AIResponseSystem() {
     const newRule = {
       name: 'New Rule',
       conditions: {
-        leadScore: [70, 100],
-        messageLength: [10, 500],
+        leadScore: [70, 100] as [number, number],
+        messageLength: [10, 500] as [number, number],
         keywords: ['price', 'cost'],
         platform: ['facebook', 'offerup'],
         timeOfDay: ['morning', 'afternoon'],
@@ -356,7 +356,7 @@ export function AIResponseSystem() {
                       <Badge variant={rule.isActive ? 'default' : 'outline'}>
                         {rule.isActive ? 'Active' : 'Inactive'}
                       </Badge>
-                      <Badge variant="rule.actions.escalation ? 'destructive' : 'secondary'">
+                      <Badge variant={rule.actions.escalation ? 'destructive' : 'secondary'}>
                         {rule.actions.escalation ? 'Escalates' : 'Auto-responds'}
                       </Badge>
                     </div>

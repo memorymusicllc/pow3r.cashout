@@ -116,11 +116,13 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
       const mockSchedules = [
         {
           id: '1',
-          name: 'Daily Posting',
+          listingId: 'listing-001',
           platform: 'facebook',
-          status: 'active',
-          nextRun: new Date(Date.now() + 24 * 60 * 60 * 1000),
-          frequency: 'daily'
+          scheduledTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          status: 'pending' as const,
+          retryCount: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         }
       ]
       set({ 
@@ -180,7 +182,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     set({ loading: true })
     try {
       // Mock data for content rotations
-      const mockRotations = []
+      const mockRotations: ContentRotation[] = []
       set({ 
         contentRotations: mockRotations,
         loading: false 
@@ -239,7 +241,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     set({ loading: true })
     try {
       // Mock data for cross-platform syncs
-      const mockSyncs = []
+      const mockSyncs: CrossPlatformSync[] = []
       set({ 
         crossPlatformSyncs: mockSyncs,
         loading: false 
@@ -253,7 +255,8 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   syncToPlatforms: async (listingId, platforms) => {
     set({ syncing: true })
     try {
-      const syncData = {
+      const syncData: CrossPlatformSync = {
+        id: `sync-${Date.now()}`,
         listingId,
         platforms,
         syncStatus: platforms.reduce((acc, platform) => ({ ...acc, [platform]: 'pending' }), {}),
@@ -263,7 +266,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
       
       // Mock implementation
       set(state => ({
-        crossPlatformSyncs: [...state.crossPlatformSyncs, newSync],
+        crossPlatformSyncs: [...state.crossPlatformSyncs, syncData],
         syncing: false
       }))
     } catch (error) {
@@ -295,14 +298,14 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   fetchMetrics: async () => {
     try {
       // Mock data for automation metrics
-      const mockMetrics = {
-        totalSchedules: 0,
-        activeSchedules: 0,
-        totalRotations: 0,
-        activeRotations: 0,
-        totalSyncs: 0,
-        successfulSyncs: 0,
-        failedSyncs: 0
+      const mockMetrics: AutomationMetrics = {
+        totalPosts: 0,
+        successfulPosts: 0,
+        failedPosts: 0,
+        averageResponseTime: 0,
+        crossPlatformReach: 0,
+        contentRotationEffectiveness: 0,
+        lastUpdated: new Date().toISOString()
       }
       set({ metrics: mockMetrics })
     } catch (error) {
