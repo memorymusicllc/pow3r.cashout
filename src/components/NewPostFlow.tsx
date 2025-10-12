@@ -248,8 +248,16 @@ export function NewPostFlow() {
     }
   }, [itemName, searchItem, searchResults.length, toast]);
 
-  const Step1EnterItem = useCallback(() => {
+  const handleUseAsTemplate = useCallback((result: SearchResult) => {
+    setItemName(result.title);
+    setCurrentStep(2);
+  }, [setItemName, setCurrentStep]);
 
+  const handleCreateNewPost = useCallback(() => {
+    setCurrentStep(2);
+  }, [setCurrentStep]);
+
+  const Step1EnterItem = useCallback(() => {
     return (
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -315,10 +323,7 @@ export function NewPostFlow() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => {
-                          setItemName(result.title);
-                          setCurrentStep(2);
-                        }}
+                        onClick={() => handleUseAsTemplate(result)}
                       >
                         Use as Template
                       </Button>
@@ -333,7 +338,7 @@ export function NewPostFlow() {
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-4">Or create a new post from scratch</p>
               <Button
-                onClick={() => setCurrentStep(2)}
+                onClick={handleCreateNewPost}
                 disabled={!itemName.trim()}
                 className="w-full"
               >
@@ -345,7 +350,7 @@ export function NewPostFlow() {
         </Card>
       </motion.div>
     );
-  }, [itemName, searchResults, searching, handleItemNameChange, handleSearch, setCurrentStep]);
+  }, [itemName, searchResults, searching, handleItemNameChange, handleSearch, handleUseAsTemplate, handleCreateNewPost]);
 
   // Step 2: Create Post
   const handlePlatformToggle = useCallback((platformId: string) => {
@@ -404,8 +409,21 @@ export function NewPostFlow() {
     }
   }, [itemName, selectedPlatforms, processImages, toast]);
 
-  const Step2CreatePost = useCallback(() => {
+  const handleAllGeneration = useCallback(async () => {
+    await handleDeepResearch();
+    await handleGenerateContent();
+    await handleGenerateImages();
+  }, [handleDeepResearch, handleGenerateContent, handleGenerateImages]);
 
+  const handleBackToStep1 = useCallback(() => {
+    setCurrentStep(1);
+  }, [setCurrentStep]);
+
+  const handleContinueToStep3 = useCallback(() => {
+    setCurrentStep(3);
+  }, [setCurrentStep]);
+
+  const Step2CreatePost = useCallback(() => {
     return (
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -509,11 +527,7 @@ export function NewPostFlow() {
               </Button>
 
               <Button
-                onClick={async () => {
-                  await handleDeepResearch();
-                  await handleGenerateContent();
-                  await handleGenerateImages();
-                }}
+                onClick={handleAllGeneration}
                 disabled={generating || selectedPlatforms.length === 0}
                 className="h-20 flex-col gap-2"
               >
@@ -556,12 +570,12 @@ export function NewPostFlow() {
         )}
 
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => setCurrentStep(1)}>
+          <Button variant="outline" onClick={handleBackToStep1}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
           <Button
-            onClick={() => setCurrentStep(3)}
+            onClick={handleContinueToStep3}
             disabled={selectedPlatforms.length === 0}
           >
             Continue
@@ -570,9 +584,17 @@ export function NewPostFlow() {
         </div>
       </motion.div>
     );
-  }, [selectedImages, selectedContent, setCurrentStep]);
+  }, [selectedPlatforms, selectedContent, generating, handlePlatformToggle, handleDeepResearch, handleGenerateContent, handleGenerateImages, handleAllGeneration, handleBackToStep1, handleContinueToStep3]);
 
   // Step 3: Customize
+  const handleBackToStep2 = useCallback(() => {
+    setCurrentStep(2);
+  }, [setCurrentStep]);
+
+  const handleContinueToStep4 = useCallback(() => {
+    setCurrentStep(4);
+  }, [setCurrentStep]);
+
   const Step3Customize = useCallback(() => {
     return (
       <motion.div
@@ -686,21 +708,45 @@ export function NewPostFlow() {
         </Card>
 
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => setCurrentStep(2)}>
+          <Button variant="outline" onClick={handleBackToStep2}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-          <Button onClick={() => setCurrentStep(4)}>
+          <Button onClick={handleContinueToStep4}>
             Continue
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </motion.div>
     );
-  }, [selectedImages, selectedContent, setCurrentStep]);
+  }, [selectedImages, selectedContent, handleBackToStep2, handleContinueToStep4]);
 
 
   // Step 4: Confirm
+  const handleConfirmPost = useCallback(async () => {
+    try {
+      await confirmPost({
+        itemName,
+        platforms: selectedPlatforms,
+        content: selectedContent,
+        images: selectedImages
+      });
+      
+      setCurrentStep(5);
+      
+      toast({
+        title: "Post Published",
+        description: `Successfully posted to ${selectedPlatforms.length} platform(s)`,
+      });
+    } catch (error) {
+      // Error is handled by the store
+    }
+  }, [itemName, selectedPlatforms, selectedContent, selectedImages, confirmPost, setCurrentStep, toast]);
+
+  const handleBackToStep3 = useCallback(() => {
+    setCurrentStep(3);
+  }, [setCurrentStep]);
+
   const Step4Confirm = useCallback(() => {
     return (
       <motion.div
@@ -750,25 +796,7 @@ export function NewPostFlow() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Button
-            onClick={async () => {
-              try {
-                await confirmPost({
-                  itemName,
-                  platforms: selectedPlatforms,
-                  content: selectedContent,
-                  images: selectedImages
-                });
-                
-                setCurrentStep(5);
-                
-                toast({
-                  title: "Post Published",
-                  description: `Successfully posted to ${selectedPlatforms.length} platform(s)`,
-                });
-              } catch (error) {
-                // Error is handled by the store
-              }
-            }}
+            onClick={handleConfirmPost}
             disabled={posting}
             className="h-16 flex-col gap-2"
           >
@@ -782,7 +810,7 @@ export function NewPostFlow() {
 
           <Button
             variant="outline"
-            onClick={() => setCurrentStep(3)}
+            onClick={handleBackToStep3}
             className="h-16 flex-col gap-2"
           >
             <Edit className="h-6 w-6" />
@@ -791,16 +819,46 @@ export function NewPostFlow() {
         </div>
 
         <div className="flex justify-center">
-          <Button variant="outline" onClick={() => setCurrentStep(3)}>
+          <Button variant="outline" onClick={handleBackToStep3}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
         </div>
       </motion.div>
     );
-  }, [itemName, selectedPlatforms, selectedContent, selectedImages, posting, confirmPost, setCurrentStep, toast]);
+  }, [itemName, selectedPlatforms, selectedContent, selectedImages, posting, handleConfirmPost, handleBackToStep3]);
 
   // Step 5: Garage
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFilters = { search: e.target.value };
+    setGarageFilters(newFilters);
+    fetchGarageItems({ ...garageFilters, ...newFilters });
+  }, [garageFilters, setGarageFilters, fetchGarageItems]);
+
+  const handlePlatformFilterChange = useCallback((value: string) => {
+    const newFilters = { platform: value };
+    setGarageFilters(newFilters);
+    fetchGarageItems({ ...garageFilters, ...newFilters });
+  }, [garageFilters, setGarageFilters, fetchGarageItems]);
+
+  const handleStatusFilterChange = useCallback((value: string) => {
+    const newFilters = { status: value };
+    setGarageFilters(newFilters);
+    fetchGarageItems({ ...garageFilters, ...newFilters });
+  }, [garageFilters, setGarageFilters, fetchGarageItems]);
+
+  const handleLoadItemForEdit = useCallback((item: PostItem) => {
+    setItemName(item.name);
+    setSelectedPlatforms(item.platforms);
+    setSelectedImages(item.images);
+    setSelectedContent(item.content);
+    setCurrentStep(3);
+  }, [setItemName, setSelectedPlatforms, setSelectedImages, setSelectedContent, setCurrentStep]);
+
+  const handleCreateNewPostFromGarage = useCallback(() => {
+    setCurrentStep(1);
+  }, [setCurrentStep]);
+
   const Step5Garage = useCallback(() => {
     // Filter items based on current filters
     const filteredItems = garageItems.filter(item => {
@@ -809,13 +867,6 @@ export function NewPostFlow() {
       const matchesStatus = garageFilters.status === 'all' || item.status === garageFilters.status;
       return matchesSearch && matchesPlatform && matchesStatus;
     });
-
-    // Handle filter changes
-    const handleFilterChange = (newFilters: Partial<GarageFilters>) => {
-      setGarageFilters(newFilters);
-      // Refetch with new filters
-      fetchGarageItems({ ...garageFilters, ...newFilters });
-    };
 
     return (
       <motion.div
@@ -841,12 +892,12 @@ export function NewPostFlow() {
               <Input
                 placeholder="Search items..."
                 value={garageFilters.search}
-                onChange={(e) => handleFilterChange({ search: e.target.value })}
+                onChange={handleSearchChange}
                 className="flex-1"
               />
               <Select
                 value={garageFilters.platform}
-                onValueChange={(value) => handleFilterChange({ platform: value })}
+                onValueChange={handlePlatformFilterChange}
               >
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Platform" />
@@ -862,7 +913,7 @@ export function NewPostFlow() {
               </Select>
               <Select
                 value={garageFilters.status}
-                onValueChange={(value) => handleFilterChange({ status: value })}
+                onValueChange={handleStatusFilterChange}
               >
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Status" />
@@ -921,14 +972,7 @@ export function NewPostFlow() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1"
-                    onClick={() => {
-                      // Load item for editing
-                      setItemName(item.name);
-                      setSelectedPlatforms(item.platforms);
-                      setSelectedImages(item.images);
-                      setSelectedContent(item.content);
-                      setCurrentStep(3); // Go to customize step
-                    }}
+                    onClick={() => handleLoadItemForEdit(item)}
                   >
                     <Eye className="h-3 w-3 mr-1" />
                     View
@@ -937,14 +981,7 @@ export function NewPostFlow() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1"
-                    onClick={() => {
-                      // Load item for editing
-                      setItemName(item.name);
-                      setSelectedPlatforms(item.platforms);
-                      setSelectedImages(item.images);
-                      setSelectedContent(item.content);
-                      setCurrentStep(3); // Go to customize step
-                    }}
+                    onClick={() => handleLoadItemForEdit(item)}
                   >
                     <Edit className="h-3 w-3 mr-1" />
                     Edit
@@ -974,7 +1011,7 @@ export function NewPostFlow() {
                 }
               </p>
               {garageItems.length === 0 && (
-                <Button onClick={() => setCurrentStep(1)}>
+                <Button onClick={handleCreateNewPostFromGarage}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Post
                 </Button>
@@ -984,14 +1021,14 @@ export function NewPostFlow() {
         )}
 
         <div className="flex justify-center">
-          <Button variant="outline" onClick={() => setCurrentStep(1)}>
+          <Button variant="outline" onClick={handleCreateNewPostFromGarage}>
             <Plus className="h-4 w-4 mr-2" />
             Create New Post
           </Button>
         </div>
       </motion.div>
     );
-  }, [garageItems, garageFilters, loading, setGarageFilters, fetchGarageItems, updateGarageItem, deleteGarageItem, setCurrentStep]);
+  }, [garageItems, garageFilters, handleSearchChange, handlePlatformFilterChange, handleStatusFilterChange, handleLoadItemForEdit, handleCreateNewPostFromGarage, deleteGarageItem]);
 
   return (
     <div className="min-h-screen bg-background">
