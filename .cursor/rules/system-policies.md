@@ -42,25 +42,39 @@ Before claiming ANY system is "working":
 5. Validate data processing and storage
 6. Test error handling and edge cases
 
-### Rule 5: Honest Status Reporting
-- Report "BROKEN" if core features don't work
-- Report "PARTIAL" if only some features work
-- Report "WORKING" only when ALL features verified functional
-- Never claim success without comprehensive verification
+### Rule 5: Honest Status Communication & Full-Auto Execution
+- **EXECUTION MODE**: Complete entire workflow (Build → Deploy → Test → Verify) before any response
+- **STATUS FORMAT**: Reply with ONE TASK LIST showing final verification status:
+  - "- [x] 🟢 VERIFIED: {name. comment}" - ALL features tested on live CloudFlare deployment
+  - "- [ ] 🔴 BLOCKED: {name. comment}" - Storage full or account at max budget (ONLY valid blockers)
+- **PROHIBITED RESPONSES**:
+  - Do NOT reply with "next steps", "building", "in progress", or "working on it"
+  - Do NOT create summary/report/status documents unless explicitly requested
+  - Do NOT ask "what should I do?" or "shall I proceed?"
+  - Do NOT claim success without CloudFlare deployment ID and live URL testing
+  - Do NOT claim credentials unavailable, 
+    - All Secrets in CloudFlare
+    - All Secrets in Cursor IDE
+    - CloudFlare App / Cursor MCP
+    - Our custom MCP Server on CloudFlare
+    - All ACLs, API Keys, Access Tokens, and variables local environment
+    - All ACLs, API Keys, Access Tokens, and variables ../
+- **FAILURE DEFINITION**: Responding before completing full deployment and verification = failed full-auto
 
 ## Enforcement
 - Violation of these rules constitutes a breach of user trust
 - Must immediately correct any false status reports
 - Must implement proper verification before any success claims
-- Must acknowledge and fix the specific bypass that led to violation
+- Must acknowledge and fix the specific bypass that led to violation, including improving the .cursor/ enforcement-mechanisms
 
 ## MANDATORY TECH STACK
-- REDUX UI MUST BE UNBOUND 
-- USE TAILWIND CSS BASIC 
-- ZUSTAND CONNECTION
+- REDUX UI (UNBOUND from data and style)
+- CSS THEMES
+- TAILWIND BASIC CSS
+- ZUSTAND 
 - VITE
 - COMPONENTS MUST SUPPORT BOTH REACT FLOW AND 3JS/REACT THREE FIBER 
-- CANNOT USE SHADCN OR NEXTJS
+- CANNOT USE SHADCN, RADIX, OR NEXTJS
 
 ## Default to E2E Validation: 
 All feature development, refactoring, or bug-fixing tasks must be accompanied by new or updated Playwright E2E tests that validate the core functionality of the changes. A task is not complete until the tests are written and passing.
@@ -77,8 +91,10 @@ Before a mission can be considered successful, the following must occur:
 4. Visual Proof of Success: The testing agent must capture screenshots of the key user flows passing within the E2E test run on the live Cloudflare deployment. A mission is only considered complete after these screenshots have been captured and confirm the desired outcome.
 
 ## DEPLOYMENT
-1. Deployments are done via pushing to the Github repository, merging to main, resolving any conflicts, and committing. Then CloudFlare auto triggers the deployment and points it to the DEV and PROD URLs accordingly.
-2. If this is not done, set it up. All ACLs are provided, see AUTH section.
+1. **PRIMARY METHOD**: CloudFlare repo watching is the primary deployment method. CloudFlare Pages automatically watches the GitHub repository and deploys on every push to main branch.
+2. **SECONDARY METHOD**: GitHub Actions can be used for additional CI/CD tasks like E2E testing, but CloudFlare repo watching handles the core deployment.
+3. **SETUP**: Ensure CloudFlare Pages project is connected to GitHub repository with proper webhook configuration.
+4. **VERIFICATION**: All deployments must be verified on live CloudFlare URLs before claiming success.
 
 ## UI DESIGN AN DEVELOPMENT
 Pow3r Component library: `git@github.com:memorymusicllc/power.components.git`
