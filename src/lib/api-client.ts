@@ -7,7 +7,8 @@ class ApiClient {
   private retryAttempts: number;
 
   constructor(baseURL = '', timeout = 10000, retryAttempts = 3) {
-    this.baseURL = baseURL;
+    // Use Cloudflare Pages Functions API endpoints
+    this.baseURL = baseURL || '/api';
     this.timeout = timeout;
     this.retryAttempts = retryAttempts;
   }

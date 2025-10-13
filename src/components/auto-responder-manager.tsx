@@ -1,3 +1,12 @@
+/**
+ * Auto Responder Manager Component
+ * Configure and manage automated response rules and templates
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Features
+ * @tags auto-responder, automation, templates, rules, phase2
+ */
 
 'use client';
 

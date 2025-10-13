@@ -1,3 +1,12 @@
+/**
+ * Leads Manager Component
+ * Comprehensive lead management and tracking interface with CRM features
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Features
+ * @tags leads, management, tracking, crm, phase2, sales
+ */
 
 'use client';
 

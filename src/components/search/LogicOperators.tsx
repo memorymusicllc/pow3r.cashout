@@ -1,6 +1,18 @@
 /**
  * Logic Operators Component
- * Visual logic operators with glowing effects and keyboard shortcuts
+ * Advanced search logic operators with glowing effects and keyboard shortcuts
+ * 
+ * Features:
+ * - Boolean logic operators (AND, OR, NOT, XOR)
+ * - Visual glow effects
+ * - Keyboard shortcuts
+ * - Query builder integration
+ * - Real-time query preview
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Search
+ * @tags logic, operators, boolean, search, advanced, keyboard
  */
 
 import React, { useState } from 'react'

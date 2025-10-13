@@ -1,3 +1,13 @@
+/**
+ * Redux UI Progress Component
+ * Unbound progress bar with flexible styling and animation
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Redux UI
+ * @tags progress, indicator, loading, ui
+ */
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 

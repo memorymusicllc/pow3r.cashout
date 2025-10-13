@@ -1,3 +1,12 @@
+/**
+ * Listing Management Component
+ * Manage active listings across multiple marketplace platforms
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Features
+ * @tags listing, management, marketplace, multi-platform, phase1
+ */
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

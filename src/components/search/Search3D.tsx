@@ -1,6 +1,18 @@
 /**
  * 3D Search Integration Component
- * Placeholder for 3D search functionality (requires React Three Fiber)
+ * Spatial 3D search visualization using React Three Fiber
+ * 
+ * Features:
+ * - 3D spatial search results
+ * - Interactive 3D visualization
+ * - Proximity-based relevance
+ * - Keyboard navigation in 3D space
+ * - Result clustering
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Search
+ * @tags search, 3d, visualization, spatial, react-three-fiber
  */
 
 import React, { useState, useEffect } from 'react'

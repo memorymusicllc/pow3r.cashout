@@ -1,3 +1,12 @@
+/**
+ * Sidebar Component
+ * Main application sidebar navigation with routing
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Navigation
+ * @tags sidebar, navigation, routing, menu
+ */
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';

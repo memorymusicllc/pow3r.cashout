@@ -15,7 +15,11 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "test:workflow": "node scripts/run-workflow-tests.js",
+    "test:services": "node scripts/start-test-services.js",
+    "backend": "node backend/server.js",
+    "test:api": "node test-workflow-apis.js"
   },
   "dependencies": {
     "@floating-ui/react": "0.26.0",

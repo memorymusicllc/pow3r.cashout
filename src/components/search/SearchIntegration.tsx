@@ -1,6 +1,19 @@
 /**
  * Search Integration Component
- * Integrates all search functionality into the dashboard header
+ * Complete integrated search solution combining all search features
+ * 
+ * Features:
+ * - Universal search with multiple algorithms
+ * - Filter chips management
+ * - Logic operators
+ * - Search history
+ * - 3D search (optional)
+ * - Keyboard shortcuts
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Search
+ * @tags search, integration, universal, filters, operators
  */
 
 import React, { useState, useEffect } from 'react'

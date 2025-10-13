@@ -9,7 +9,7 @@ A modern, automated dashboard for managing marketplace listings built with Vite,
 
 - 🚀 Lightning-fast Vite development
 - ⚡ Cloudflare Pages deployment
-- 🎨 ShadCN UI with dark mode
+- 🎨 Redux UI (Unbound Design System) with dark mode
 - 📊 Real-time analytics dashboard
 - 🤖 Automated response management
 - 📱 Mobile-first responsive design
@@ -18,8 +18,12 @@ A modern, automated dashboard for managing marketplace listings built with Vite,
 
 ## Documentation
 
+- [Component Library Documentation](COMPONENT_LIBRARY_DOCUMENTATION.md) - Complete Redux UI component library documentation
+- [Component Inventory](COMPONENT_INVENTORY.md) - Comprehensive listing of all 139 components
 - [New Post Flow Workflow](README-NewPostFlow.md) - Comprehensive guide to the new post creation workflow
 - [API Integration Guide](API_INTEGRATION_GUIDE.md) - Complete API integration documentation and testing guide
+- [Workflow API Documentation](WORKFLOW_API_DOCUMENTATION.md) - Workflow management API endpoints and testing
+- [E2E Testing Guide](e2e/README.md) - Playwright E2E testing documentation
 
 ## Getting Started
 
@@ -126,7 +130,7 @@ pow3r.cashout/
 ### Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite
-- **UI**: ShadCN UI, Tailwind CSS, Radix UI
+- **UI**: Redux UI (Unbound Design System), Tailwind CSS, Radix UI
 - **Routing**: React Router v6
 - **State Management**: Zustand, TanStack Query
 - **Charts**: Recharts, Chart.js

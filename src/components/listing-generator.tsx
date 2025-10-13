@@ -1,3 +1,12 @@
+/**
+ * Listing Generator Component
+ * AI-powered listing generation for marketplace posts with multi-platform support
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Features
+ * @tags listing, generation, ai, marketplace, phase1, automation
+ */
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

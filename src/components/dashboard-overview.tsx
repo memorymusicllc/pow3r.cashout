@@ -1,3 +1,12 @@
+/**
+ * Dashboard Overview Component
+ * Main dashboard home page with metrics and quick actions
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Features
+ * @tags dashboard, overview, metrics, home, analytics
+ */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/redux-ui';
 import { Button } from '@/components/redux-ui';

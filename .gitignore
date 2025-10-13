@@ -41,3 +41,13 @@ build/**
 .wrangler
 wrangler.toml.backup
 
+# Test results and reports
+test-results/
+playwright-report/
+*.webm
+*.zip
+
+# Temporary files
+*.tmp
+*.temp
+

@@ -1,6 +1,21 @@
 /**
  * Universal Search Component
- * The one search component to rule them all
+ * The one search component to rule them all - comprehensive search solution
+ * 
+ * Features:
+ * - Multiple search algorithms (fuzzy, semantic, exact)
+ * - Advanced filtering system
+ * - Logic operators (AND, OR, NOT, XOR)
+ * - Search suggestions and history
+ * - 3D search integration (optional)
+ * - Keyboard shortcuts
+ * - Real-time results
+ * - Weighted relevance scoring
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Search
+ * @tags search, universal, advanced, algorithms, filters, operators
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'

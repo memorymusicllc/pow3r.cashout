@@ -6,6 +6,12 @@ pages_build_output_dir = "dist"
 # Tech Stack: React Three Fiber/Redux UI/Zustand/Vite/Tailwind CSS/Playwright/CloudFlare
 # Version Format: v.{DEV/PROD}.{YYYMMDD.HH.MM}.{CloudFlare_Deployment_ID}
 
+# D1 Database configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "pow3r-cashout-db"
+database_id = "your-database-id-here"  # Replace with actual D1 database ID
+
 [env.production.vars]
 ENVIRONMENT = "production"
 VERSION_PREFIX = "PROD"

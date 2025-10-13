@@ -1,3 +1,12 @@
+/**
+ * Dashboard Layout Component
+ * Main layout wrapper with sidebar and mobile navigation
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Layout
+ * @tags layout, dashboard, sidebar, mobile-nav, responsive
+ */
 
 import { Sidebar } from './sidebar';
 import { MobileNav } from './ui/mobile-nav';

@@ -1,6 +1,18 @@
 /**
  * Filter Chips Component
- * Visual filter tags with smart routing
+ * Visual filter tags with smart routing and removal functionality
+ * 
+ * Features:
+ * - Color-coded filter categories
+ * - Individual filter removal
+ * - Clear all filters action
+ * - Icon-based visual identification
+ * - Responsive chip layout
+ * 
+ * @version 1.0.0
+ * @date 2025-10-12
+ * @category Search
+ * @tags filter, chips, search, ui, visual
  */
 
 import React from 'react'

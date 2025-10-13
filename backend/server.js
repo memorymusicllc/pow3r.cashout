@@ -2337,7 +2337,2381 @@ app.delete('/api/post-projects/:projectId', async (req, res) => {
   }
 });
 
-// 12. Abacus Research APIs
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// 12. Workflow API Endpoints
+
+// ===== PROJECT MANAGEMENT APIs =====
+
+// Get all projects
+app.get('/api/projects', async (req, res) => {
+  try {
+    const { userId = 'user-001', status, priority, category, assignedTo, tags, startDate, endDate, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    if (priority) {
+      whereConditions.push('priority = ?');
+      params.push(priority);
+    }
+    if (category) {
+      whereConditions.push('category = ?');
+      params.push(category);
+    }
+    if (assignedTo) {
+      whereConditions.push('JSON_EXTRACT(participants, "$") LIKE ?');
+      params.push(`%"${assignedTo}"%`);
+    }
+    if (tags) {
+      const tagList = tags.split(',');
+      whereConditions.push('JSON_EXTRACT(tags, "$") LIKE ?');
+      params.push(`%"${tagList[0]}"%`);
+    }
+    if (startDate) {
+      whereConditions.push('created_at >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('created_at <= ?');
+      params.push(endDate);
+    }
+    
+    const projects = await dbAll(`
+      SELECT * FROM projects 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedProjects = projects.map(project => ({
+      ...project,
+      participants: JSON.parse(project.participants || '[]'),
+      tags: JSON.parse(project.tags || '[]'),
+      metadata: project.metadata ? JSON.parse(project.metadata) : {}
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedProjects,
+      total: parsedProjects.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create new project
+app.post('/api/projects', async (req, res) => {
+  try {
+    const { 
+      name, 
+      description, 
+      status = 'draft',
+      priority = 'medium',
+      progress = 0,
+      startDate,
+      dueDate,
+      participants = [],
+      tags = [],
+      category,
+      estimatedHours,
+      actualHours = 0,
+      budget,
+      spent = 0,
+      createdBy,
+      metadata = {}
+    } = req.body;
+    
+    const projectId = `project-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO projects (
+        id, name, description, status, priority, progress, start_date, due_date,
+        participants, tags, category, estimated_hours, actual_hours, budget, spent,
+        created_by, created_at, updated_at, metadata
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      projectId, name, description, status, priority, progress, startDate, dueDate,
+      JSON.stringify(participants), JSON.stringify(tags), category, estimatedHours, actualHours, budget, spent,
+      createdBy, now, now, JSON.stringify(metadata)
+    ]);
+    
+    const newProject = await dbGet(`SELECT * FROM projects WHERE id = ?`, [projectId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newProject,
+        participants: JSON.parse(newProject.participants || '[]'),
+        tags: JSON.parse(newProject.tags || '[]'),
+        metadata: newProject.metadata ? JSON.parse(newProject.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update project
+app.put('/api/projects/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    // Build dynamic update query
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['name', 'description', 'status', 'priority', 'progress', 'startDate', 'dueDate', 'participants', 'tags', 'category', 'estimatedHours', 'actualHours', 'budget', 'spent', 'metadata'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'participants' || field === 'tags' || field === 'metadata') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(projectId, userId);
+    
+    await dbRun(`
+      UPDATE projects 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND created_by = ?
+    `, updateValues);
+    
+    const updatedProject = await dbGet(`
+      SELECT * FROM projects 
+      WHERE id = ? AND created_by = ?
+    `, [projectId, userId]);
+    
+    if (!updatedProject) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedProject,
+        participants: JSON.parse(updatedProject.participants || '[]'),
+        tags: JSON.parse(updatedProject.tags || '[]'),
+        metadata: updatedProject.metadata ? JSON.parse(updatedProject.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete project
+app.delete('/api/projects/:projectId', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    const project = await dbGet(`
+      SELECT id FROM projects 
+      WHERE id = ? AND created_by = ?
+    `, [projectId, userId]);
+    
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        error: 'Project not found'
+      });
+    }
+    
+    await dbRun(`
+      DELETE FROM projects 
+      WHERE id = ? AND created_by = ?
+    `, [projectId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, projectId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get project steps
+app.get('/api/projects/:projectId/steps', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    const steps = await dbAll(`
+      SELECT * FROM project_steps 
+      WHERE project_id = ? AND user_id = ?
+      ORDER BY "order" ASC
+    `, [projectId, userId]);
+    
+    const parsedSteps = steps.map(step => ({
+      ...step,
+      dependencies: JSON.parse(step.dependencies || '[]'),
+      deliverables: JSON.parse(step.deliverables || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedSteps,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create project step
+app.post('/api/project-steps', async (req, res) => {
+  try {
+    const {
+      projectId,
+      title,
+      description,
+      status = 'pending',
+      order,
+      estimatedHours,
+      actualHours = 0,
+      assignedTo,
+      dueDate,
+      dependencies = [],
+      deliverables = [],
+      notes,
+      userId = 'user-001'
+    } = req.body;
+    
+    const stepId = `step-${Date.now()}`;
+    
+    await dbRun(`
+      INSERT INTO project_steps (
+        id, project_id, title, description, status, "order", estimated_hours,
+        actual_hours, assigned_to, due_date, dependencies, deliverables, notes, user_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      stepId, projectId, title, description, status, order, estimatedHours,
+      actualHours, assignedTo, dueDate, JSON.stringify(dependencies), JSON.stringify(deliverables), notes, userId
+    ]);
+    
+    const newStep = await dbGet(`SELECT * FROM project_steps WHERE id = ?`, [stepId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newStep,
+        dependencies: JSON.parse(newStep.dependencies || '[]'),
+        deliverables: JSON.parse(newStep.deliverables || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update project step
+app.put('/api/project-steps/:stepId', async (req, res) => {
+  try {
+    const { stepId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['title', 'description', 'status', 'order', 'estimatedHours', 'actualHours', 'assignedTo', 'dueDate', 'dependencies', 'deliverables', 'notes'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'dependencies' || field === 'deliverables') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(stepId, userId);
+    
+    await dbRun(`
+      UPDATE project_steps 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND user_id = ?
+    `, updateValues);
+    
+    const updatedStep = await dbGet(`
+      SELECT * FROM project_steps 
+      WHERE id = ? AND user_id = ?
+    `, [stepId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedStep,
+        dependencies: JSON.parse(updatedStep.dependencies || '[]'),
+        deliverables: JSON.parse(updatedStep.deliverables || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete project step
+app.delete('/api/project-steps/:stepId', async (req, res) => {
+  try {
+    const { stepId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM project_steps 
+      WHERE id = ? AND user_id = ?
+    `, [stepId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, stepId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Reorder project steps
+app.put('/api/projects/:projectId/steps/reorder', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { stepIds } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    for (let i = 0; i < stepIds.length; i++) {
+      await dbRun(`
+        UPDATE project_steps 
+        SET "order" = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ? AND project_id = ? AND user_id = ?
+      `, [i + 1, stepIds[i], projectId, userId]);
+    }
+    
+    res.json({
+      success: true,
+      data: { reordered: true },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get project templates
+app.get('/api/project-templates', async (req, res) => {
+  try {
+    const { userId = 'user-001' } = req.query;
+    
+    const templates = await dbAll(`
+      SELECT * FROM project_templates 
+      WHERE created_by = ? OR is_public = 1
+      ORDER BY usage_count DESC, created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      steps: JSON.parse(template.steps || '[]'),
+      tags: JSON.parse(template.tags || '[]'),
+      variables: template.variables ? JSON.parse(template.variables) : {}
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create project template
+app.post('/api/project-templates', async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      category,
+      tags = [],
+      steps = [],
+      estimatedDuration,
+      isPublic = false,
+      createdBy
+    } = req.body;
+    
+    const templateId = `template-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO project_templates (
+        id, name, description, category, tags, steps, estimated_duration,
+        is_public, usage_count, created_by, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
+    `, [
+      templateId, name, description, category, JSON.stringify(tags), JSON.stringify(steps), estimatedDuration,
+      isPublic, createdBy, now, now
+    ]);
+    
+    const newTemplate = await dbGet(`SELECT * FROM project_templates WHERE id = ?`, [templateId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTemplate,
+        steps: JSON.parse(newTemplate.steps || '[]'),
+        tags: JSON.parse(newTemplate.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ===== MESSAGE HANDLING APIs =====
+
+// Get all messages
+app.get('/api/messages', async (req, res) => {
+  try {
+    const { userId = 'user-001', status, priority, platform, type, sentiment, tags, assignedTo, startDate, endDate, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    if (priority) {
+      whereConditions.push('priority = ?');
+      params.push(priority);
+    }
+    if (platform) {
+      whereConditions.push('platform = ?');
+      params.push(platform);
+    }
+    if (type) {
+      whereConditions.push('type = ?');
+      params.push(type);
+    }
+    if (sentiment) {
+      whereConditions.push('sentiment = ?');
+      params.push(sentiment);
+    }
+    if (tags) {
+      const tagList = tags.split(',');
+      whereConditions.push('JSON_EXTRACT(tags, "$") LIKE ?');
+      params.push(`%"${tagList[0]}"%`);
+    }
+    if (assignedTo) {
+      whereConditions.push('assigned_to = ?');
+      params.push(assignedTo);
+    }
+    if (startDate) {
+      whereConditions.push('timestamp >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('timestamp <= ?');
+      params.push(endDate);
+    }
+    
+    const messages = await dbAll(`
+      SELECT * FROM messages 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY timestamp DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedMessages = messages.map(message => ({
+      ...message,
+      tags: JSON.parse(message.tags || '[]'),
+      attachments: JSON.parse(message.attachments || '[]'),
+      metadata: message.metadata ? JSON.parse(message.metadata) : {}
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedMessages,
+      total: parsedMessages.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create new message
+app.post('/api/messages', async (req, res) => {
+  try {
+    const {
+      leadId,
+      platform,
+      sender,
+      content,
+      status = 'unread',
+      priority = 'medium',
+      type = 'inquiry',
+      autoResponse,
+      manualResponse,
+      responseTime,
+      sentiment,
+      tags = [],
+      attachments = [],
+      metadata = {},
+      userId = 'user-001'
+    } = req.body;
+    
+    const messageId = `msg-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO messages (
+        id, lead_id, platform, sender, content, status, priority, type,
+        auto_response, manual_response, response_time, sentiment, tags,
+        attachments, metadata, user_id, timestamp, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      messageId, leadId, platform, sender, content, status, priority, type,
+      autoResponse, manualResponse, responseTime, sentiment, JSON.stringify(tags),
+      JSON.stringify(attachments), JSON.stringify(metadata), userId, now, now, now
+    ]);
+    
+    const newMessage = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newMessage,
+        tags: JSON.parse(newMessage.tags || '[]'),
+        attachments: JSON.parse(newMessage.attachments || '[]'),
+        metadata: newMessage.metadata ? JSON.parse(newMessage.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update message
+app.put('/api/messages/:messageId', async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['status', 'priority', 'type', 'autoResponse', 'manualResponse', 'responseTime', 'sentiment', 'tags', 'attachments', 'metadata'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'tags' || field === 'attachments' || field === 'metadata') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(messageId, userId);
+    
+    await dbRun(`
+      UPDATE messages 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND user_id = ?
+    `, updateValues);
+    
+    const updatedMessage = await dbGet(`
+      SELECT * FROM messages 
+      WHERE id = ? AND user_id = ?
+    `, [messageId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedMessage,
+        tags: JSON.parse(updatedMessage.tags || '[]'),
+        attachments: JSON.parse(updatedMessage.attachments || '[]'),
+        metadata: updatedMessage.metadata ? JSON.parse(updatedMessage.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete message
+app.delete('/api/messages/:messageId', async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM messages 
+      WHERE id = ? AND user_id = ?
+    `, [messageId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, messageId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk update messages
+app.put('/api/messages/bulk-update', async (req, res) => {
+  try {
+    const { ids, updates } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['status', 'priority', 'type', 'sentiment', 'tags'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'tags') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    const placeholders = ids.map(() => '?').join(',');
+    updateValues.push(...ids, userId);
+    
+    await dbRun(`
+      UPDATE messages 
+      SET ${updateFields.join(', ')}
+      WHERE id IN (${placeholders}) AND user_id = ?
+    `, updateValues);
+    
+    res.json({
+      success: true,
+      data: { updated: ids.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk delete messages
+app.delete('/api/messages/bulk-delete', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const placeholders = ids.map(() => '?').join(',');
+    
+    await dbRun(`
+      DELETE FROM messages 
+      WHERE id IN (${placeholders}) AND user_id = ?
+    `, [...ids, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: ids.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Process incoming message
+app.post('/api/messages/process', async (req, res) => {
+  try {
+    const { leadId, platform, sender, content, metadata = {} } = req.body;
+    const userId = 'user-001';
+    
+    // Analyze message sentiment and priority
+    const sentiment = content.toLowerCase().includes('urgent') || content.toLowerCase().includes('asap') ? 'negative' : 'neutral';
+    const priority = content.toLowerCase().includes('urgent') || content.toLowerCase().includes('asap') ? 'high' : 'medium';
+    
+    // Check for auto-response triggers
+    const autoResponse = content.toLowerCase().includes('price') ? 'Thank you for your interest! I\'ll get back to you with pricing information shortly.' : null;
+    
+    const messageId = `msg-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO messages (
+        id, lead_id, platform, sender, content, status, priority, type,
+        auto_response, sentiment, metadata, user_id, timestamp, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, 'unread', ?, 'inquiry', ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      messageId, leadId, platform, sender, content, priority, autoResponse, sentiment,
+      JSON.stringify(metadata), userId, now, now, now
+    ]);
+    
+    const newMessage = await dbGet(`SELECT * FROM messages WHERE id = ?`, [messageId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newMessage,
+        tags: JSON.parse(newMessage.tags || '[]'),
+        attachments: JSON.parse(newMessage.attachments || '[]'),
+        metadata: newMessage.metadata ? JSON.parse(newMessage.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Generate auto response
+app.post('/api/messages/:messageId/auto-response', async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    const message = await dbGet(`
+      SELECT * FROM messages 
+      WHERE id = ? AND user_id = ?
+    `, [messageId, userId]);
+    
+    if (!message) {
+      return res.status(404).json({
+        success: false,
+        error: 'Message not found'
+      });
+    }
+    
+    // Simple auto-response logic based on message content
+    let response = 'Thank you for your message! I\'ll get back to you as soon as possible.';
+    
+    if (message.content.toLowerCase().includes('price')) {
+      response = 'Thank you for your interest! I\'ll send you pricing information shortly.';
+    } else if (message.content.toLowerCase().includes('available')) {
+      response = 'Yes, this item is still available! When would you like to see it?';
+    } else if (message.content.toLowerCase().includes('condition')) {
+      response = 'The item is in excellent condition. I can provide more details if needed.';
+    }
+    
+    res.json({
+      success: true,
+      data: { response },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get message templates
+app.get('/api/message-templates', async (req, res) => {
+  try {
+    const { userId = 'user-001' } = req.query;
+    
+    const templates = await dbAll(`
+      SELECT * FROM message_templates 
+      WHERE created_by = ? OR is_public = 1
+      ORDER BY usage_count DESC, created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      platform: JSON.parse(template.platform || '[]'),
+      triggers: JSON.parse(template.triggers || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create message template
+app.post('/api/message-templates', async (req, res) => {
+  try {
+    const {
+      name,
+      content,
+      category,
+      platform = [],
+      triggers = [],
+      isActive = true,
+      createdBy
+    } = req.body;
+    
+    const templateId = `template-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO message_templates (
+        id, name, content, category, platform, triggers, is_active,
+        usage_count, success_rate, created_by, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?)
+    `, [
+      templateId, name, content, category, JSON.stringify(platform), JSON.stringify(triggers), isActive,
+      createdBy, now, now
+    ]);
+    
+    const newTemplate = await dbGet(`SELECT * FROM message_templates WHERE id = ?`, [templateId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTemplate,
+        platform: JSON.parse(newTemplate.platform || '[]'),
+        triggers: JSON.parse(newTemplate.triggers || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update message template
+app.put('/api/message-templates/:templateId', async (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['name', 'content', 'category', 'platform', 'triggers', 'isActive'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'platform' || field === 'triggers') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(templateId, userId);
+    
+    await dbRun(`
+      UPDATE message_templates 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND created_by = ?
+    `, updateValues);
+    
+    const updatedTemplate = await dbGet(`
+      SELECT * FROM message_templates 
+      WHERE id = ? AND created_by = ?
+    `, [templateId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedTemplate,
+        platform: JSON.parse(updatedTemplate.platform || '[]'),
+        triggers: JSON.parse(updatedTemplate.triggers || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete message template
+app.delete('/api/message-templates/:templateId', async (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM message_templates 
+      WHERE id = ? AND created_by = ?
+    `, [templateId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, templateId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get message analytics
+app.get('/api/messages/analytics', async (req, res) => {
+  try {
+    const { userId = 'user-001', startDate, endDate } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (startDate) {
+      whereConditions.push('timestamp >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('timestamp <= ?');
+      params.push(endDate);
+    }
+    
+    const analytics = await dbGet(`
+      SELECT 
+        COUNT(*) as total_messages,
+        SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END) as unread_count,
+        SUM(CASE WHEN status = 'replied' THEN 1 ELSE 0 END) as replied_count,
+        AVG(response_time) as avg_response_time,
+        COUNT(DISTINCT platform) as platform_count
+      FROM messages 
+      WHERE ${whereConditions.join(' AND ')}
+    `, params);
+    
+    const platformBreakdown = await dbAll(`
+      SELECT platform, COUNT(*) as count
+      FROM messages 
+      WHERE ${whereConditions.join(' AND ')}
+      GROUP BY platform
+    `, params);
+    
+    const priorityBreakdown = await dbAll(`
+      SELECT priority, COUNT(*) as count
+      FROM messages 
+      WHERE ${whereConditions.join(' AND ')}
+      GROUP BY priority
+    `, params);
+    
+    res.json({
+      success: true,
+      data: {
+        analytics,
+        platformBreakdown,
+        priorityBreakdown
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ===== FLOW MODIFICATION APIs =====
+
+// Get all flows
+app.get('/api/flows', async (req, res) => {
+  try {
+    const { userId = 'user-001', status, category, tags, createdBy, startDate, endDate, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['created_by = ?'];
+    let params = [userId];
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    if (category) {
+      whereConditions.push('category = ?');
+      params.push(category);
+    }
+    if (tags) {
+      const tagList = tags.split(',');
+      whereConditions.push('JSON_EXTRACT(tags, "$") LIKE ?');
+      params.push(`%"${tagList[0]}"%`);
+    }
+    if (createdBy) {
+      whereConditions.push('created_by = ?');
+      params.push(createdBy);
+    }
+    if (startDate) {
+      whereConditions.push('created_at >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('created_at <= ?');
+      params.push(endDate);
+    }
+    
+    const flows = await dbAll(`
+      SELECT * FROM flows 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedFlows = flows.map(flow => ({
+      ...flow,
+      nodes: JSON.parse(flow.nodes || '[]'),
+      connections: JSON.parse(flow.connections || '[]'),
+      variables: flow.variables ? JSON.parse(flow.variables) : {},
+      settings: flow.settings ? JSON.parse(flow.settings) : {},
+      statistics: flow.statistics ? JSON.parse(flow.statistics) : {},
+      tags: JSON.parse(flow.tags || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedFlows,
+      total: parsedFlows.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create new flow
+app.post('/api/flows', async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      status = 'draft',
+      category,
+      tags = [],
+      nodes = [],
+      connections = [],
+      variables = {},
+      settings = {},
+      statistics = {},
+      createdBy
+    } = req.body;
+    
+    const flowId = `flow-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO flows (
+        id, name, description, status, category, tags, nodes, connections,
+        variables, settings, statistics, created_by, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      flowId, name, description, status, category, JSON.stringify(tags), JSON.stringify(nodes), JSON.stringify(connections),
+      JSON.stringify(variables), JSON.stringify(settings), JSON.stringify(statistics), createdBy, now, now
+    ]);
+    
+    const newFlow = await dbGet(`SELECT * FROM flows WHERE id = ?`, [flowId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newFlow,
+        nodes: JSON.parse(newFlow.nodes || '[]'),
+        connections: JSON.parse(newFlow.connections || '[]'),
+        variables: newFlow.variables ? JSON.parse(newFlow.variables) : {},
+        settings: newFlow.settings ? JSON.parse(newFlow.settings) : {},
+        statistics: newFlow.statistics ? JSON.parse(newFlow.statistics) : {},
+        tags: JSON.parse(newFlow.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update flow
+app.put('/api/flows/:flowId', async (req, res) => {
+  try {
+    const { flowId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['name', 'description', 'status', 'category', 'tags', 'nodes', 'connections', 'variables', 'settings', 'statistics'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (['tags', 'nodes', 'connections', 'variables', 'settings', 'statistics'].includes(field)) {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(flowId, userId);
+    
+    await dbRun(`
+      UPDATE flows 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND created_by = ?
+    `, updateValues);
+    
+    const updatedFlow = await dbGet(`
+      SELECT * FROM flows 
+      WHERE id = ? AND created_by = ?
+    `, [flowId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedFlow,
+        nodes: JSON.parse(updatedFlow.nodes || '[]'),
+        connections: JSON.parse(updatedFlow.connections || '[]'),
+        variables: updatedFlow.variables ? JSON.parse(updatedFlow.variables) : {},
+        settings: updatedFlow.settings ? JSON.parse(updatedFlow.settings) : {},
+        statistics: updatedFlow.statistics ? JSON.parse(updatedFlow.statistics) : {},
+        tags: JSON.parse(updatedFlow.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete flow
+app.delete('/api/flows/:flowId', async (req, res) => {
+  try {
+    const { flowId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM flows 
+      WHERE id = ? AND created_by = ?
+    `, [flowId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, flowId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Execute flow
+app.post('/api/flows/:flowId/execute', async (req, res) => {
+  try {
+    const { flowId } = req.params;
+    const { input = {} } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const flow = await dbGet(`
+      SELECT * FROM flows 
+      WHERE id = ? AND created_by = ?
+    `, [flowId, userId]);
+    
+    if (!flow) {
+      return res.status(404).json({
+        success: false,
+        error: 'Flow not found'
+      });
+    }
+    
+    const executionId = `exec-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    // Create execution record
+    await dbRun(`
+      INSERT INTO flow_executions (
+        id, flow_id, status, start_time, input, logs, user_id
+      ) VALUES (?, ?, 'running', ?, ?, ?, ?)
+    `, [executionId, flowId, now, JSON.stringify(input), JSON.stringify([]), userId]);
+    
+    // Simulate flow execution
+    setTimeout(async () => {
+      const endTime = new Date().toISOString();
+      const duration = Date.now() - new Date(now).getTime();
+      
+      await dbRun(`
+        UPDATE flow_executions 
+        SET status = 'completed', end_time = ?, duration = ?, output = ?
+        WHERE id = ?
+      `, [endTime, duration, JSON.stringify({ result: 'Flow executed successfully', input }), executionId]);
+      
+      // Update flow statistics
+      const stats = JSON.parse(flow.statistics || '{}');
+      stats.totalExecutions = (stats.totalExecutions || 0) + 1;
+      stats.successfulExecutions = (stats.successfulExecutions || 0) + 1;
+      stats.averageExecutionTime = (stats.averageExecutionTime || 0) + duration / 2;
+      stats.lastExecution = endTime;
+      
+      await dbRun(`
+        UPDATE flows 
+        SET statistics = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `, [JSON.stringify(stats), flowId]);
+    }, 1000);
+    
+    const execution = await dbGet(`SELECT * FROM flow_executions WHERE id = ?`, [executionId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...execution,
+        input: JSON.parse(execution.input || '{}'),
+        logs: JSON.parse(execution.logs || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Test flow
+app.post('/api/flows/:flowId/test', async (req, res) => {
+  try {
+    const { flowId } = req.params;
+    const { input = {} } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const flow = await dbGet(`
+      SELECT * FROM flows 
+      WHERE id = ? AND created_by = ?
+    `, [flowId, userId]);
+    
+    if (!flow) {
+      return res.status(404).json({
+        success: false,
+        error: 'Flow not found'
+      });
+    }
+    
+    // Simulate test execution
+    const testResult = {
+      success: true,
+      result: 'Flow test completed successfully',
+      input,
+      executionTime: Math.random() * 1000,
+      logs: [
+        { timestamp: new Date().toISOString(), level: 'info', message: 'Flow test started' },
+        { timestamp: new Date().toISOString(), level: 'info', message: 'All nodes validated' },
+        { timestamp: new Date().toISOString(), level: 'info', message: 'Flow test completed' }
+      ]
+    };
+    
+    res.json({
+      success: true,
+      data: testResult,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get flow executions
+app.get('/api/flow-executions', async (req, res) => {
+  try {
+    const { userId = 'user-001', flowId, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (flowId) {
+      whereConditions.push('flow_id = ?');
+      params.push(flowId);
+    }
+    
+    const executions = await dbAll(`
+      SELECT * FROM flow_executions 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY start_time DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedExecutions = executions.map(execution => ({
+      ...execution,
+      input: JSON.parse(execution.input || '{}'),
+      output: execution.output ? JSON.parse(execution.output) : null,
+      logs: JSON.parse(execution.logs || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedExecutions,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Cancel flow execution
+app.post('/api/flow-executions/:executionId/cancel', async (req, res) => {
+  try {
+    const { executionId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      UPDATE flow_executions 
+      SET status = 'cancelled', end_time = CURRENT_TIMESTAMP
+      WHERE id = ? AND user_id = ?
+    `, [executionId, userId]);
+    
+    res.json({
+      success: true,
+      data: { cancelled: true, executionId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get flow templates
+app.get('/api/flow-templates', async (req, res) => {
+  try {
+    const { userId = 'user-001' } = req.query;
+    
+    const templates = await dbAll(`
+      SELECT * FROM flow_templates 
+      WHERE created_by = ? OR is_public = 1
+      ORDER BY usage_count DESC, created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      nodes: JSON.parse(template.nodes || '[]'),
+      connections: JSON.parse(template.connections || '[]'),
+      variables: template.variables ? JSON.parse(template.variables) : {},
+      tags: JSON.parse(template.tags || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create flow template
+app.post('/api/flow-templates', async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      category,
+      tags = [],
+      nodes = [],
+      connections = [],
+      variables = {},
+      isPublic = false,
+      createdBy
+    } = req.body;
+    
+    const templateId = `template-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO flow_templates (
+        id, name, description, category, tags, nodes, connections,
+        variables, is_public, usage_count, created_by, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
+    `, [
+      templateId, name, description, category, JSON.stringify(tags), JSON.stringify(nodes), JSON.stringify(connections),
+      JSON.stringify(variables), isPublic, createdBy, now, now
+    ]);
+    
+    const newTemplate = await dbGet(`SELECT * FROM flow_templates WHERE id = ?`, [templateId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTemplate,
+        nodes: JSON.parse(newTemplate.nodes || '[]'),
+        connections: JSON.parse(newTemplate.connections || '[]'),
+        variables: newTemplate.variables ? JSON.parse(newTemplate.variables) : {},
+        tags: JSON.parse(newTemplate.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ===== POST MANAGEMENT APIs =====
+
+// Get all posts
+app.get('/api/posts', async (req, res) => {
+  try {
+    const { userId = 'user-001', status, priority, category, platform, tags, author, startDate, endDate, limit = 50, offset = 0 } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (status) {
+      whereConditions.push('status = ?');
+      params.push(status);
+    }
+    if (priority) {
+      whereConditions.push('priority = ?');
+      params.push(priority);
+    }
+    if (category) {
+      whereConditions.push('category = ?');
+      params.push(category);
+    }
+    if (platform) {
+      whereConditions.push('JSON_EXTRACT(platforms, "$") LIKE ?');
+      params.push(`%"${platform}"%`);
+    }
+    if (tags) {
+      const tagList = tags.split(',');
+      whereConditions.push('JSON_EXTRACT(tags, "$") LIKE ?');
+      params.push(`%"${tagList[0]}"%`);
+    }
+    if (author) {
+      whereConditions.push('author = ?');
+      params.push(author);
+    }
+    if (startDate) {
+      whereConditions.push('created_at >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('created_at <= ?');
+      params.push(endDate);
+    }
+    
+    const posts = await dbAll(`
+      SELECT * FROM posts 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `, [...params, parseInt(limit), parseInt(offset)]);
+    
+    const parsedPosts = posts.map(post => ({
+      ...post,
+      platforms: JSON.parse(post.platforms || '[]'),
+      tags: JSON.parse(post.tags || '[]'),
+      images: JSON.parse(post.images || '[]'),
+      metadata: post.metadata ? JSON.parse(post.metadata) : {}
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedPosts,
+      total: parsedPosts.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create new post
+app.post('/api/posts', async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      content,
+      platforms = [],
+      status = 'draft',
+      priority = 'medium',
+      category,
+      tags = [],
+      images = [],
+      author,
+      createdBy,
+      metadata = {}
+    } = req.body;
+    
+    const postId = `post-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO posts (
+        id, title, description, content, platforms, status, priority, category,
+        tags, images, author, created_by, created_at, updated_at, metadata
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      postId, title, description, content, JSON.stringify(platforms), status, priority, category,
+      JSON.stringify(tags), JSON.stringify(images), author, createdBy, now, now, JSON.stringify(metadata)
+    ]);
+    
+    const newPost = await dbGet(`SELECT * FROM posts WHERE id = ?`, [postId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newPost,
+        platforms: JSON.parse(newPost.platforms || '[]'),
+        tags: JSON.parse(newPost.tags || '[]'),
+        images: JSON.parse(newPost.images || '[]'),
+        metadata: newPost.metadata ? JSON.parse(newPost.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update post
+app.put('/api/posts/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['title', 'description', 'content', 'platforms', 'status', 'priority', 'category', 'tags', 'images', 'metadata'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (['platforms', 'tags', 'images', 'metadata'].includes(field)) {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(postId, userId);
+    
+    await dbRun(`
+      UPDATE posts 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND created_by = ?
+    `, updateValues);
+    
+    const updatedPost = await dbGet(`
+      SELECT * FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedPost,
+        platforms: JSON.parse(updatedPost.platforms || '[]'),
+        tags: JSON.parse(updatedPost.tags || '[]'),
+        images: JSON.parse(updatedPost.images || '[]'),
+        metadata: updatedPost.metadata ? JSON.parse(updatedPost.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete post
+app.delete('/api/posts/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, postId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Publish post
+app.post('/api/posts/:postId/publish', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { platforms } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const post = await dbGet(`
+      SELECT * FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      });
+    }
+    
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      UPDATE posts 
+      SET status = 'published', published_at = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND created_by = ?
+    `, [now, postId, userId]);
+    
+    // Create analytics records for each platform
+    const targetPlatforms = platforms || JSON.parse(post.platforms || '[]');
+    for (const platform of targetPlatforms) {
+      const analyticsId = `analytics-${Date.now()}-${platform}`;
+      await dbRun(`
+        INSERT INTO post_analytics (
+          id, post_id, platform, views, likes, shares, comments, clicks, conversions,
+          engagement, reach, impressions, last_updated, user_id
+        ) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, ?, ?)
+      `, [analyticsId, postId, platform, now, userId]);
+    }
+    
+    const updatedPost = await dbGet(`
+      SELECT * FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedPost,
+        platforms: JSON.parse(updatedPost.platforms || '[]'),
+        tags: JSON.parse(updatedPost.tags || '[]'),
+        images: JSON.parse(updatedPost.images || '[]'),
+        metadata: updatedPost.metadata ? JSON.parse(updatedPost.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Schedule post
+app.post('/api/posts/:postId/schedule', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { scheduledAt, platforms } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const post = await dbGet(`
+      SELECT * FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      });
+    }
+    
+    await dbRun(`
+      UPDATE posts 
+      SET status = 'scheduled', scheduled_at = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND created_by = ?
+    `, [scheduledAt, postId, userId]);
+    
+    // Create schedule records for each platform
+    const targetPlatforms = platforms || JSON.parse(post.platforms || '[]');
+    for (const platform of targetPlatforms) {
+      const scheduleId = `schedule-${Date.now()}-${platform}`;
+      await dbRun(`
+        INSERT INTO post_schedules (
+          id, post_id, platform, scheduled_at, status, retry_count, max_retries, user_id
+        ) VALUES (?, ?, ?, ?, 'pending', 0, 3, ?)
+      `, [scheduleId, postId, platform, scheduledAt, userId]);
+    }
+    
+    const updatedPost = await dbGet(`
+      SELECT * FROM posts 
+      WHERE id = ? AND created_by = ?
+    `, [postId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedPost,
+        platforms: JSON.parse(updatedPost.platforms || '[]'),
+        tags: JSON.parse(updatedPost.tags || '[]'),
+        images: JSON.parse(updatedPost.images || '[]'),
+        metadata: updatedPost.metadata ? JSON.parse(updatedPost.metadata) : {}
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk publish posts
+app.post('/api/posts/bulk-publish', async (req, res) => {
+  try {
+    const { postIds, platforms } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const placeholders = postIds.map(() => '?').join(',');
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      UPDATE posts 
+      SET status = 'published', published_at = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (${placeholders}) AND created_by = ?
+    `, [now, ...postIds, userId]);
+    
+    res.json({
+      success: true,
+      data: { published: postIds.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk schedule posts
+app.post('/api/posts/bulk-schedule', async (req, res) => {
+  try {
+    const { postIds, scheduledAt, platforms } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const placeholders = postIds.map(() => '?').join(',');
+    
+    await dbRun(`
+      UPDATE posts 
+      SET status = 'scheduled', scheduled_at = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (${placeholders}) AND created_by = ?
+    `, [scheduledAt, ...postIds, userId]);
+    
+    res.json({
+      success: true,
+      data: { scheduled: postIds.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk archive posts
+app.post('/api/posts/bulk-archive', async (req, res) => {
+  try {
+    const { postIds } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const placeholders = postIds.map(() => '?').join(',');
+    
+    await dbRun(`
+      UPDATE posts 
+      SET status = 'archived', updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (${placeholders}) AND created_by = ?
+    `, [...postIds, userId]);
+    
+    res.json({
+      success: true,
+      data: { archived: postIds.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Bulk delete posts
+app.delete('/api/posts/bulk-delete', async (req, res) => {
+  try {
+    const { postIds } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    const placeholders = postIds.map(() => '?').join(',');
+    
+    await dbRun(`
+      DELETE FROM posts 
+      WHERE id IN (${placeholders}) AND created_by = ?
+    `, [...postIds, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: postIds.length },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get post analytics
+app.get('/api/posts/analytics', async (req, res) => {
+  try {
+    const { userId = 'user-001', postId } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (postId) {
+      whereConditions.push('post_id = ?');
+      params.push(postId);
+    }
+    
+    const analytics = await dbAll(`
+      SELECT * FROM post_analytics 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY last_updated DESC
+    `, params);
+    
+    res.json({
+      success: true,
+      data: analytics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update post analytics
+app.put('/api/posts/:postId/analytics/:platform', async (req, res) => {
+  try {
+    const { postId, platform } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['views', 'likes', 'shares', 'comments', 'clicks', 'conversions', 'engagement', 'reach', 'impressions'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        updateFields.push(`${field} = ?`);
+        updateValues.push(updates[field]);
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('last_updated = CURRENT_TIMESTAMP');
+    updateValues.push(postId, platform, userId);
+    
+    await dbRun(`
+      UPDATE post_analytics 
+      SET ${updateFields.join(', ')}
+      WHERE post_id = ? AND platform = ? AND user_id = ?
+    `, updateValues);
+    
+    const updatedAnalytics = await dbGet(`
+      SELECT * FROM post_analytics 
+      WHERE post_id = ? AND platform = ? AND user_id = ?
+    `, [postId, platform, userId]);
+    
+    res.json({
+      success: true,
+      data: updatedAnalytics,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get post schedules
+app.get('/api/post-schedules', async (req, res) => {
+  try {
+    const { userId = 'user-001', postId } = req.query;
+    
+    let whereConditions = ['user_id = ?'];
+    let params = [userId];
+    
+    if (postId) {
+      whereConditions.push('post_id = ?');
+      params.push(postId);
+    }
+    
+    const schedules = await dbAll(`
+      SELECT * FROM post_schedules 
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY scheduled_at ASC
+    `, params);
+    
+    res.json({
+      success: true,
+      data: schedules,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Cancel post schedule
+app.post('/api/post-schedules/:scheduleId/cancel', async (req, res) => {
+  try {
+    const { scheduleId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      UPDATE post_schedules 
+      SET status = 'cancelled'
+      WHERE id = ? AND user_id = ?
+    `, [scheduleId, userId]);
+    
+    res.json({
+      success: true,
+      data: { cancelled: true, scheduleId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Reschedule post
+app.put('/api/post-schedules/:scheduleId/reschedule', async (req, res) => {
+  try {
+    const { scheduleId } = req.params;
+    const { scheduledAt } = req.body;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      UPDATE post_schedules 
+      SET scheduled_at = ?, status = 'pending'
+      WHERE id = ? AND user_id = ?
+    `, [scheduledAt, scheduleId, userId]);
+    
+    const updatedSchedule = await dbGet(`
+      SELECT * FROM post_schedules 
+      WHERE id = ? AND user_id = ?
+    `, [scheduleId, userId]);
+    
+    res.json({
+      success: true,
+      data: updatedSchedule,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get post templates
+app.get('/api/post-templates', async (req, res) => {
+  try {
+    const { userId = 'user-001' } = req.query;
+    
+    const templates = await dbAll(`
+      SELECT * FROM post_templates 
+      WHERE created_by = ? OR is_public = 1
+      ORDER BY usage_count DESC, created_at DESC
+    `, [userId]);
+    
+    const parsedTemplates = templates.map(template => ({
+      ...template,
+      platforms: JSON.parse(template.platforms || '[]'),
+      tags: JSON.parse(template.tags || '[]')
+    }));
+    
+    res.json({
+      success: true,
+      data: parsedTemplates,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Create post template
+app.post('/api/post-templates', async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      content,
+      category,
+      tags = [],
+      platforms = [],
+      isPublic = false,
+      createdBy
+    } = req.body;
+    
+    const templateId = `template-${Date.now()}`;
+    const now = new Date().toISOString();
+    
+    await dbRun(`
+      INSERT INTO post_templates (
+        id, name, description, content, category, tags, platforms,
+        is_public, usage_count, success_rate, created_by, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?)
+    `, [
+      templateId, name, description, content, category, JSON.stringify(tags), JSON.stringify(platforms),
+      isPublic, createdBy, now, now
+    ]);
+    
+    const newTemplate = await dbGet(`SELECT * FROM post_templates WHERE id = ?`, [templateId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...newTemplate,
+        platforms: JSON.parse(newTemplate.platforms || '[]'),
+        tags: JSON.parse(newTemplate.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update post template
+app.put('/api/post-templates/:templateId', async (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    const updates = req.body;
+    
+    const updateFields = [];
+    const updateValues = [];
+    
+    const allowedFields = ['name', 'description', 'content', 'category', 'tags', 'platforms', 'isPublic'];
+    
+    allowedFields.forEach(field => {
+      if (updates[field] !== undefined) {
+        if (field === 'tags' || field === 'platforms') {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(JSON.stringify(updates[field]));
+        } else {
+          updateFields.push(`${field} = ?`);
+          updateValues.push(updates[field]);
+        }
+      }
+    });
+    
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update'
+      });
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
+    updateValues.push(templateId, userId);
+    
+    await dbRun(`
+      UPDATE post_templates 
+      SET ${updateFields.join(', ')}
+      WHERE id = ? AND created_by = ?
+    `, updateValues);
+    
+    const updatedTemplate = await dbGet(`
+      SELECT * FROM post_templates 
+      WHERE id = ? AND created_by = ?
+    `, [templateId, userId]);
+    
+    res.json({
+      success: true,
+      data: {
+        ...updatedTemplate,
+        platforms: JSON.parse(updatedTemplate.platforms || '[]'),
+        tags: JSON.parse(updatedTemplate.tags || '[]')
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete post template
+app.delete('/api/post-templates/:templateId', async (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const { userId = 'user-001' } = req.query;
+    
+    await dbRun(`
+      DELETE FROM post_templates 
+      WHERE id = ? AND created_by = ?
+    `, [templateId, userId]);
+    
+    res.json({
+      success: true,
+      data: { deleted: true, templateId },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// 13. Abacus Research APIs
 app.get('/api/abacus-research/:researchId', async (req, res) => {
   try {
     const { researchId } = req.params;
