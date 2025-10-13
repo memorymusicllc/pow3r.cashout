@@ -121,11 +121,12 @@ const defaultChartData = {
     { actual: 'Negative', predicted: 'Negative', count: 15 }
   ],
   roc: [
-    { fpr: 0, tpr: 0 },
-    { fpr: 0.1, tpr: 0.2 },
-    { fpr: 0.2, tpr: 0.4 },
-    { fpr: 0.3, tpr: 0.6 },
-    { fpr: 1, tpr: 1 }
+    { threshold: 0.0, tpr: 0.0, fpr: 0.0, precision: 0.8, recall: 0.0, f1Score: 0.0 },
+    { threshold: 0.2, tpr: 0.3, fpr: 0.1, precision: 0.75, recall: 0.3, f1Score: 0.43 },
+    { threshold: 0.4, tpr: 0.6, fpr: 0.2, precision: 0.75, recall: 0.6, f1Score: 0.67 },
+    { threshold: 0.6, tpr: 0.8, fpr: 0.3, precision: 0.73, recall: 0.8, f1Score: 0.76 },
+    { threshold: 0.8, tpr: 0.9, fpr: 0.4, precision: 0.69, recall: 0.9, f1Score: 0.78 },
+    { threshold: 1.0, tpr: 1.0, fpr: 1.0, precision: 0.5, recall: 1.0, f1Score: 0.67 }
   ],
   sankey: [
     { source: 'A', target: 'B', value: 10 },

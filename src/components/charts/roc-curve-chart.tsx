@@ -92,8 +92,13 @@ export function ROCCurveChart({
       })
     } else {
       return chartData.reduce((best, current) => {
-        const bestDistance = Math.sqrt((1 - best.recall) ** 2 + (1 - best.precision) ** 2)
-        const currentDistance = Math.sqrt((1 - current.recall) ** 2 + (1 - current.precision) ** 2)
+        const bestRecall = best.recall || 0
+        const bestPrecision = best.precision || 0
+        const currentRecall = current.recall || 0
+        const currentPrecision = current.precision || 0
+        
+        const bestDistance = Math.sqrt((1 - bestRecall) ** 2 + (1 - bestPrecision) ** 2)
+        const currentDistance = Math.sqrt((1 - currentRecall) ** 2 + (1 - currentPrecision) ** 2)
         return currentDistance < bestDistance ? current : best
       })
     }
@@ -326,14 +331,14 @@ export function ROCCurveChart({
             <div>
               <div className="font-medium">ROC Curve</div>
               <div>AUC: {rocAUC.toFixed(3)}</div>
-              <div>Optimal TPR: {optimalPoint.tpr.toFixed(3)}</div>
-              <div>Optimal FPR: {optimalPoint.fpr.toFixed(3)}</div>
+              <div>Optimal TPR: {(optimalPoint.tpr || 0).toFixed(3)}</div>
+              <div>Optimal FPR: {(optimalPoint.fpr || 0).toFixed(3)}</div>
             </div>
             <div>
               <div className="font-medium">Precision-Recall</div>
               <div>AUC: {prAUC.toFixed(3)}</div>
-              <div>Optimal Precision: {optimalPoint.precision.toFixed(3)}</div>
-              <div>Optimal Recall: {optimalPoint.recall.toFixed(3)}</div>
+              <div>Optimal Precision: {(optimalPoint.precision || 0).toFixed(3)}</div>
+              <div>Optimal Recall: {(optimalPoint.recall || 0).toFixed(3)}</div>
             </div>
           </div>
 

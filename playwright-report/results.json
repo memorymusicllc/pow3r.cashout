@@ -62,10 +62,15 @@
     }
   },
   "suites": [],
-  "errors": [],
+  "errors": [
+    {
+      "message": "Error: http://localhost:5173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.",
+      "stack": "Error: http://localhost:5173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer."
+    }
+  ],
   "stats": {
-    "startTime": "2025-10-12T18:58:57.027Z",
-    "duration": 13670.937,
+    "startTime": "2025-10-13T06:45:20.723Z",
+    "duration": 319.666,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,
