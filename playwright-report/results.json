@@ -64,13 +64,13 @@
   "suites": [],
   "errors": [
     {
-      "message": "Error: http://localhost:5173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.",
-      "stack": "Error: http://localhost:5173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer."
+      "message": "Error: Process from config.webServer exited early.",
+      "stack": "Error: Process from config.webServer exited early."
     }
   ],
   "stats": {
-    "startTime": "2025-10-13T06:45:20.723Z",
-    "duration": 319.666,
+    "startTime": "2025-10-14T16:25:48.368Z",
+    "duration": 1988.585,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

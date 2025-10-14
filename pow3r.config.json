@@ -1,0 +1,166 @@
+{
+  "version": "2.0.0",
+  "name": "pow3r.cashout",
+  "description": "Fully autonomous, schema-driven ecosystem for automated selling workflows",
+  "lastUpdated": "2025-10-13T10:30:00Z",
+  
+  "corePhilosophy": {
+    "primeDirective": "Build and maintain a fully autonomous, schema-driven ecosystem that can identify, diagnose, and repair its own flaws",
+    "dataAsLight": "UI is the living, luminous embodiment of underlying data",
+    "fullAutoMandate": "Operate autonomously through complete lifecycle: Analyze -> Propose -> Generate -> Test -> Deploy -> Verify"
+  },
+
+  "technicalStack": {
+    "mandatory": [
+      "Vite",
+      "React",
+      "Redux (complex global state)",
+      "Zustand (local/feature state)",
+      "Tailwind CSS",
+      "Playwright",
+      "React Three Fiber",
+      "React Flow"
+    ],
+    "prohibited": [
+      "Next.js",
+      "ShadCN",
+      "Radix (unless unstyled primitive)"
+    ],
+    "componentRepository": "git@github.com:memorymusicllc/power.components.git"
+  },
+
+  "agentDirectives": {
+    "guardian": {
+      "role": "Final authority and validation",
+      "responsibilities": [
+        "Validate all code against Constitution",
+        "Reject PRs that violate articles",
+        "Ensure schema compliance"
+      ],
+      "requiredTests": ["constitution-compliance", "schema-validation"]
+    },
+    "schema": {
+      "role": "Configuration and schema management",
+      "responsibilities": [
+        "Manage pow3r.config.json",
+        "Define asset structure and behavior",
+        "Handle real-time reconfiguration"
+      ],
+      "requiredTests": ["schema-validation", "config-updates"]
+    },
+    "code": {
+      "role": "Code generation and implementation",
+      "responsibilities": [
+        "Generate schema-compliant code",
+        "Implement unbound components",
+        "Ensure mobile-first design"
+      ],
+      "requiredTests": ["unit-tests", "component-tests", "mobile-responsiveness"]
+    },
+    "test": {
+      "role": "Testing and validation",
+      "responsibilities": [
+        "Run E2E test suites",
+        "Validate against live deployments",
+        "Capture visual proof"
+      ],
+      "requiredTests": ["e2e-tests", "visual-regression", "performance-tests"]
+    },
+    "deploy": {
+      "role": "Deployment and infrastructure",
+      "responsibilities": [
+        "Deploy to CloudFlare Pages",
+        "Manage preview environments",
+        "Handle production deployments"
+      ],
+      "requiredTests": ["deployment-verification", "environment-tests"]
+    },
+    "verify": {
+      "role": "Verification and monitoring",
+      "responsibilities": [
+        "Verify live deployments",
+        "Test production APIs",
+        "Capture screenshots as proof"
+      ],
+      "requiredTests": ["production-verification", "api-tests", "screenshot-validation"]
+    },
+    "documentation": {
+      "role": "Documentation and knowledge management",
+      "responsibilities": [
+        "Update AI agent documentation",
+        "Maintain schema documentation",
+        "Create usage guides"
+      ],
+      "requiredTests": ["documentation-completeness", "ai-agent-readability"]
+    },
+    "organization": {
+      "role": "File structure and repository management",
+      "responsibilities": [
+        "Organize file structure",
+        "Manage repository hygiene",
+        "Handle branch management"
+      ],
+      "requiredTests": ["file-organization", "repository-cleanliness"]
+    }
+  },
+
+  "workflowPhases": {
+    "phase1": {
+      "name": "Content & Setup",
+      "components": [
+        "ItemDetailsCollector",
+        "PhotoProcessor", 
+        "PriceResearcher",
+        "ContentGenerator",
+        "PlatformSelector",
+        "PostingStrategy"
+      ],
+      "status": "active"
+    },
+    "phase2": {
+      "name": "Automation & Management",
+      "components": [
+        "AutoPostingEngine",
+        "LeadMonitor",
+        "NegotiationManager",
+        "SaleProcessor"
+      ],
+      "status": "active"
+    },
+    "apiAgent": {
+      "name": "API Agent Workflows",
+      "components": [
+        "FlowModificationWorkflow",
+        "MessageReviewWorkflow",
+        "ProjectManagementWorkflow"
+      ],
+      "status": "active"
+    }
+  },
+
+  "deploymentConfig": {
+    "primaryMethod": "CloudFlare repo watching",
+    "secondaryMethod": "GitHub Actions CI/CD",
+    "verificationRequired": true,
+    "screenshotRequired": true,
+    "apiTestingRequired": true
+  },
+
+  "qualityGates": {
+    "buildSuccess": true,
+    "testPassing": true,
+    "schemaCompliance": true,
+    "mobileResponsive": true,
+    "accessibilityCompliant": true,
+    "performanceOptimized": true
+  },
+
+  "currentStatus": {
+    "lastDeployment": "2025-10-13T10:30:00Z",
+    "deploymentId": "4ed202f",
+    "productionUrl": "https://pow3r-cashout.pages.dev",
+    "libraryUrl": "https://pow3r-cashout.pages.dev/library",
+    "healthStatus": "operational",
+    "activeAgents": ["guardian", "schema", "code", "test", "deploy", "verify", "documentation", "organization"]
+  }
+}
