@@ -104,7 +104,7 @@ export function ROCCurveChart({
     }
   }
 
-  const optimalPoint = findOptimalPoint()
+  const optimalPoint = findOptimalPoint() || { tpr: 0, fpr: 0, precision: 0, recall: 0 }
 
   // Generate curve path
   const generateCurvePath = (points: ROCPoint[], xKey: keyof ROCPoint, yKey: keyof ROCPoint) => {

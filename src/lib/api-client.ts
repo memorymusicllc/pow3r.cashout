@@ -175,7 +175,9 @@ class ApiClient {
 }
 
 // Singleton instance - pointing to real backend API
-export const apiClient = new ApiClient('http://localhost:3001', 15000, 3);
+const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+const apiBaseUrl = isProduction ? 'https://pow3r-cashout.pages.dev' : 'http://localhost:3001';
+export const apiClient = new ApiClient(apiBaseUrl, 15000, 3);
 
 // Specific API functions
 export const api = {

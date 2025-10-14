@@ -61,18 +61,3351 @@
       "timeout": 120000
     }
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: Process from config.webServer exited early.",
-      "stack": "Error: Process from config.webServer exited early."
+      "title": "01-visual-rendering.spec.ts",
+      "file": "01-visual-rendering.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Visual Rendering - Critical",
+          "file": "01-visual-rendering.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load CSS and apply styles to body",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-435133a3cd08f35860f5",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should load CSS file successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-c1670e7ae3727a74cf61",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should apply dark mode styles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-42b6ab33901e2737fea2",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 62,
+              "column": 3
+            },
+            {
+              "title": "should style cards with borders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-af837fb2165378e2477f",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "should render with proper typography",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-075de662574e564503b9",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 121,
+              "column": 3
+            },
+            {
+              "title": "should have responsive grid layout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-d0397cc561c495c27f2b",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 147,
+              "column": 3
+            },
+            {
+              "title": "should render charts with visual elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9671247ee16e9b7e2ac4-3e3b597460f00b4328b6",
+              "file": "01-visual-rendering.spec.ts",
+              "line": 173,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "02-dashboard-functionality.spec.ts",
+      "file": "02-dashboard-functionality.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Dashboard Functionality",
+          "file": "02-dashboard-functionality.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display complete dashboard with all widgets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-8ca900ada3f7c37c0d5a",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 15,
+              "column": 3
+            },
+            {
+              "title": "should have NO navigation menu (SPA requirement)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-3bead7e741c55dfcb898",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 36,
+              "column": 3
+            },
+            {
+              "title": "should display version number in correct format",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-1b32707fbda343c21c03",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 52,
+              "column": 3
+            },
+            {
+              "title": "should render Price History chart with data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-33102f65dac920ba3966",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 66,
+              "column": 3
+            },
+            {
+              "title": "should render Lead Pipeline chart",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-4af5b0c78df4807c644b",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 85,
+              "column": 3
+            },
+            {
+              "title": "should display stats with proper formatting",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-1370817f8ec0e1a36d77",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on mobile (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-92203bb5ce230d8e3bcb",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 113,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on tablet (768px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-f80fb8bf79f5d51860ec",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on desktop (1920px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "da54ab2db6978488a08d-eb2c9f7a87f2020fecb9",
+              "file": "02-dashboard-functionality.spec.ts",
+              "line": 142,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "03-component-library.spec.ts",
+      "file": "03-component-library.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Component Library",
+          "file": "03-component-library.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load library page with proper styling",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-374c4d7f13492eb46158",
+              "file": "03-component-library.spec.ts",
+              "line": 15,
+              "column": 3
+            },
+            {
+              "title": "should display back button with styles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-6ec3eb3bd4466e72f800",
+              "file": "03-component-library.spec.ts",
+              "line": 39,
+              "column": 3
+            },
+            {
+              "title": "should navigate back to dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-3501d52b038988da5911",
+              "file": "03-component-library.spec.ts",
+              "line": 61,
+              "column": 3
+            },
+            {
+              "title": "should display component metadata cards",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-b40a02c986840879fc60",
+              "file": "03-component-library.spec.ts",
+              "line": 79,
+              "column": 3
+            },
+            {
+              "title": "should render component previews",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-073ab321412714ab0447",
+              "file": "03-component-library.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "should display sections properly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "254672b3b993e6e7bc72-bd12330ff349474bac05",
+              "file": "03-component-library.spec.ts",
+              "line": 113,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "04-css-validation.spec.ts",
+      "file": "04-css-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "CSS Validation - CRITICAL",
+          "file": "04-css-validation.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Tailwind CSS must be compiled (NO @tailwind directives)",
+              "ok": true,
+              "tags": [
+                "tailwind"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-413a77b3c8f514d12075",
+              "file": "04-css-validation.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Background color must be applied (dark mode)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-9aa4733030cc936dcc96",
+              "file": "04-css-validation.spec.ts",
+              "line": 46,
+              "column": 3
+            },
+            {
+              "title": "Text color must be visible on dark background",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-caad0da4f7482d4a3dce",
+              "file": "04-css-validation.spec.ts",
+              "line": 70,
+              "column": 3
+            },
+            {
+              "title": "Cards must have visible borders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-c875f5fe37eae99f4636",
+              "file": "04-css-validation.spec.ts",
+              "line": 90,
+              "column": 3
+            },
+            {
+              "title": "Grid layout must be applied",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-be77128399c7824554f2",
+              "file": "04-css-validation.spec.ts",
+              "line": 122,
+              "column": 3
+            },
+            {
+              "title": "Typography styles must be applied",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-9de544b8b79977b8a833",
+              "file": "04-css-validation.spec.ts",
+              "line": 148,
+              "column": 3
+            },
+            {
+              "title": "Icons must render with proper size",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "856cc1b83153c24f0246-72f837472fc1c9fad801",
+              "file": "04-css-validation.spec.ts",
+              "line": 177,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "05-visual-regression.spec.ts",
+      "file": "05-visual-regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Visual Regression Baselines",
+          "file": "05-visual-regression.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "capture dashboard baseline - desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-ea314b9aa391a4f93254",
+              "file": "05-visual-regression.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "capture dashboard baseline - mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-1525c02f78308f9c22b0",
+              "file": "05-visual-regression.spec.ts",
+              "line": 28,
+              "column": 3
+            },
+            {
+              "title": "capture component library baseline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-4171b969a025d15f5aa4",
+              "file": "05-visual-regression.spec.ts",
+              "line": 43,
+              "column": 3
+            },
+            {
+              "title": "capture individual widget - Price Chart",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-878b3b4660e51d9f785b",
+              "file": "05-visual-regression.spec.ts",
+              "line": 57,
+              "column": 3
+            },
+            {
+              "title": "capture individual widget - Leads Chart",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-627686fcc9995f54b78e",
+              "file": "05-visual-regression.spec.ts",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "capture individual widget - Stats",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-7f87830bd60b0f525791",
+              "file": "05-visual-regression.spec.ts",
+              "line": 85,
+              "column": 3
+            },
+            {
+              "title": "capture individual widget - Listings",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-f449485bd6e0b2e812c2",
+              "file": "05-visual-regression.spec.ts",
+              "line": 98,
+              "column": 3
+            },
+            {
+              "title": "capture dark mode colors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0e57951c95d16effd2fa-8f203355c13c37654a7a",
+              "file": "05-visual-regression.spec.ts",
+              "line": 113,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dashboard-layout.spec.ts",
+      "file": "dashboard-layout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Dashboard Layout",
+          "file": "dashboard-layout.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have proper 2x2 grid layout on desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "75b2f09d819a83fd75c1-a3d18ba027da182c4b3d",
+              "file": "dashboard-layout.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should have cards that fit properly in 2x2 grid",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "75b2f09d819a83fd75c1-f257673e4f8d91d1c5ab",
+              "file": "dashboard-layout.spec.ts",
+              "line": 25,
+              "column": 3
+            },
+            {
+              "title": "should be responsive and stack on mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "75b2f09d819a83fd75c1-d51aa5128f8e19aec9f8",
+              "file": "dashboard-layout.spec.ts",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should have proper card heights for dashboard layout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "75b2f09d819a83fd75c1-994eef80930eefac2fb3",
+              "file": "dashboard-layout.spec.ts",
+              "line": 62,
+              "column": 3
+            },
+            {
+              "title": "should display all dashboard widgets in proper layout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "75b2f09d819a83fd75c1-566de7eef3dd25a66229",
+              "file": "dashboard-layout.spec.ts",
+              "line": 77,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "full-auto-system.spec.ts",
+      "file": "full-auto-system.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Full-Auto Multi-Agent System",
+          "file": "full-auto-system.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Main Dashboard loads and displays all workflow sections",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-383c217134c1c8a7b7d9",
+              "file": "full-auto-system.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "Component Library is fully functional",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-2a32a88d669c43f72164",
+              "file": "full-auto-system.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "API Agent workflows are accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-654fbda30de043fba1c8",
+              "file": "full-auto-system.spec.ts",
+              "line": 54,
+              "column": 3
+            },
+            {
+              "title": "UI Agent workflows are accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-0fdde2d085c01765ea61",
+              "file": "full-auto-system.spec.ts",
+              "line": 67,
+              "column": 3
+            },
+            {
+              "title": "All chart components render without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-99859aa3d49545e06a70",
+              "file": "full-auto-system.spec.ts",
+              "line": 80,
+              "column": 3
+            },
+            {
+              "title": "Mobile responsiveness works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-849c8cffabadd237142b",
+              "file": "full-auto-system.spec.ts",
+              "line": 115,
+              "column": 3
+            },
+            {
+              "title": "Production APIs are functional",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-d6601ecd2f9a8a9f25cd",
+              "file": "full-auto-system.spec.ts",
+              "line": 131,
+              "column": 3
+            },
+            {
+              "title": "Complete user workflow from dashboard to library",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-d087e7cfc1acbbaaa052",
+              "file": "full-auto-system.spec.ts",
+              "line": 142,
+              "column": 3
+            },
+            {
+              "title": "Screenshot capture for production verification",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c869cd7662d552cad2f8-0c6a060a79ddd54e447c",
+              "file": "full-auto-system.spec.ts",
+              "line": 170,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "functional-autoresponder.spec.ts",
+      "file": "functional-autoresponder.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Auto-Responder Functionality",
+          "file": "functional-autoresponder.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display auto-responder stats from store",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cd19db66053926327998-ac4d6a81903f0e927eb4",
+              "file": "functional-autoresponder.spec.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load rules data on mount",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cd19db66053926327998-90eaf772a15fdb953a81",
+              "file": "functional-autoresponder.spec.ts",
+              "line": 36,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "functional-dashboard.spec.ts",
+      "file": "functional-dashboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Dashboard Metrics Functionality",
+          "file": "functional-dashboard.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display metrics from dashboard store",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3a15c274a8eca20d7619-910cc325eb0470d9607e",
+              "file": "functional-dashboard.spec.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load metrics on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3a15c274a8eca20d7619-0780223b5ff05b4f4296",
+              "file": "functional-dashboard.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should refresh metrics when refresh button clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3a15c274a8eca20d7619-50544288584720c0daf0",
+              "file": "functional-dashboard.spec.ts",
+              "line": 50,
+              "column": 3
+            },
+            {
+              "title": "should show spinner during refresh",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3a15c274a8eca20d7619-cf990631ecb957531417",
+              "file": "functional-dashboard.spec.ts",
+              "line": 72,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "functional-listings.spec.ts",
+      "file": "functional-listings.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Listings Functionality",
+          "file": "functional-listings.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display listings from store",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1b79dd288d8a4d369edd-17dd1f62fc58df3f1d56",
+              "file": "functional-listings.spec.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should show loading state initially",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1b79dd288d8a4d369edd-a627af3a43ee44f131bc",
+              "file": "functional-listings.spec.ts",
+              "line": 35,
+              "column": 3
+            },
+            {
+              "title": "should have refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1b79dd288d8a4d369edd-275bde9a3fc3f5ad6266",
+              "file": "functional-listings.spec.ts",
+              "line": 52,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-ai-responses.spec.ts",
+      "file": "phase2-ai-responses.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: AI Response System",
+          "file": "phase2-ai-responses.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display AI response system interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-f83a46073d365645676b",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should show AI response tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-548a48b62b930c8da653",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should allow creating new template",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-6a0ec00725e7f362dc38",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 43,
+              "column": 3
+            },
+            {
+              "title": "should allow creating new rule",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-0eee08aae092957d341c",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "should display AI metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-231bc00a0398bbe2f4d0",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "should show active AI sessions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-5078104ebfaf182b1c08",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 92,
+              "column": 3
+            },
+            {
+              "title": "should handle test response functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-8de0df1aa0865e1c5b49",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should handle refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6452581afdc10762ad95-848afa03aafc74cb56d6",
+              "file": "phase2-ai-responses.spec.ts",
+              "line": 120,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-analytics.spec.ts",
+      "file": "phase2-analytics.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: Analytics Dashboard",
+          "file": "phase2-analytics.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display analytics dashboard interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-96146f3eff7d8ba58916",
+              "file": "phase2-analytics.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should show analytics tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-20b250072121fa5b5260",
+              "file": "phase2-analytics.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should display key metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-5d1a58da30c775932815",
+              "file": "phase2-analytics.spec.ts",
+              "line": 44,
+              "column": 3
+            },
+            {
+              "title": "should show platform performance",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-d3363bb83fdc696dcfb4",
+              "file": "phase2-analytics.spec.ts",
+              "line": 59,
+              "column": 3
+            },
+            {
+              "title": "should allow creating new insight",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-503f14306394d958395d",
+              "file": "phase2-analytics.spec.ts",
+              "line": 67,
+              "column": 3
+            },
+            {
+              "title": "should show optimization insights",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-34ae8452935d9ba19f26",
+              "file": "phase2-analytics.spec.ts",
+              "line": 84,
+              "column": 3
+            },
+            {
+              "title": "should show report templates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-36d91600833efa72d969",
+              "file": "phase2-analytics.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "should show custom dashboards",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-5d1e5e552a19244e2cee",
+              "file": "phase2-analytics.spec.ts",
+              "line": 107,
+              "column": 3
+            },
+            {
+              "title": "should handle export functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-1d0b8c6c067c36d25d77",
+              "file": "phase2-analytics.spec.ts",
+              "line": 119,
+              "column": 3
+            },
+            {
+              "title": "should handle refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d708dab651ebf0493639-fd9b0da25c02600507ef",
+              "file": "phase2-analytics.spec.ts",
+              "line": 133,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-automation.spec.ts",
+      "file": "phase2-automation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: Automation Engine",
+          "file": "phase2-automation.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display automation engine interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-1ea7af2504c03179df49",
+              "file": "phase2-automation.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should show automation tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-694ed2aa2ff333eb9890",
+              "file": "phase2-automation.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should allow creating new schedule",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-d15a5b2364777e66b984",
+              "file": "phase2-automation.spec.ts",
+              "line": 43,
+              "column": 3
+            },
+            {
+              "title": "should allow creating content rotation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-776ff83aed479af38700",
+              "file": "phase2-automation.spec.ts",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "should allow cross-platform sync",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-d48b50800368f080ddce",
+              "file": "phase2-automation.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "should display automation metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-7dac5a7e9a7a37e0f533",
+              "file": "phase2-automation.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "should handle refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "20153dbf414f16ec0bdf-771b5ba3b3cc0f208e7c",
+              "file": "phase2-automation.spec.ts",
+              "line": 110,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-complete.spec.ts",
+      "file": "phase2-complete.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: Complete System",
+          "file": "phase2-complete.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display all Phase 2 navigation tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-5622315347f4769f1b3d",
+              "file": "phase2-complete.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should navigate through all Phase 2 components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-5a9052588975971fb2fd",
+              "file": "phase2-complete.spec.ts",
+              "line": 29,
+              "column": 3
+            },
+            {
+              "title": "should maintain state across navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-82dbac91b87dd61493aa",
+              "file": "phase2-complete.spec.ts",
+              "line": 51,
+              "column": 3
+            },
+            {
+              "title": "should handle global refresh across all components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-911e6e6d343ebe233ba6",
+              "file": "phase2-complete.spec.ts",
+              "line": 63,
+              "column": 3
+            },
+            {
+              "title": "should display consistent header across all components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-73ce904e1df7735941a1",
+              "file": "phase2-complete.spec.ts",
+              "line": 74,
+              "column": 3
+            },
+            {
+              "title": "should show metrics across all components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-1692cd3f920c2d8e4a35",
+              "file": "phase2-complete.spec.ts",
+              "line": 93,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive design across all components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-473bac368f02b71951d9",
+              "file": "phase2-complete.spec.ts",
+              "line": 111,
+              "column": 3
+            },
+            {
+              "title": "should maintain dark theme across all components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-b37830110baf1c5902b6",
+              "file": "phase2-complete.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should handle loading states gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-8505e5f34ec5997af77c",
+              "file": "phase2-complete.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "should complete full user journey",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "66aa1ab986e35e61f765-b54e7fe7d4ebe4228166",
+              "file": "phase2-complete.spec.ts",
+              "line": 156,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-leads.spec.ts",
+      "file": "phase2-leads.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: Lead Monitor",
+          "file": "phase2-leads.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display lead monitor interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-c908634f93cca7a94f9d",
+              "file": "phase2-leads.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should show lead tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-60c8dfabddfe66cf8cb1",
+              "file": "phase2-leads.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should display lead metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-77ea53d56de52ed8d13f",
+              "file": "phase2-leads.spec.ts",
+              "line": 45,
+              "column": 3
+            },
+            {
+              "title": "should handle filter functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-79d009604e08e8f5c03e",
+              "file": "phase2-leads.spec.ts",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "should handle refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-0a3df95fdb5632affd19",
+              "file": "phase2-leads.spec.ts",
+              "line": 74,
+              "column": 3
+            },
+            {
+              "title": "should show lead status tabs with counts",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-6adede68141723ec5a6c",
+              "file": "phase2-leads.spec.ts",
+              "line": 85,
+              "column": 3
+            },
+            {
+              "title": "should display real-time updates indicator",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "70f49a287cab6b6794d3-dc4f01eaf015473b6aa6",
+              "file": "phase2-leads.spec.ts",
+              "line": 97,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "phase2-negotiation.spec.ts",
+      "file": "phase2-negotiation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 2: Negotiation Manager",
+          "file": "phase2-negotiation.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display negotiation manager interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-637d7dd6f692eba903da",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "should show negotiation tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-56e6b004d854fe3af5bc",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should allow starting new negotiation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-c51f716524dba0efddf2",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 44,
+              "column": 3
+            },
+            {
+              "title": "should display negotiation metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-4ff25d3edbf5a957f298",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 58,
+              "column": 3
+            },
+            {
+              "title": "should show active negotiations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-8434a351cb4c05dc2297",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 73,
+              "column": 3
+            },
+            {
+              "title": "should show completed negotiations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-ac7c73726d6d118b49e2",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 84,
+              "column": 3
+            },
+            {
+              "title": "should show negotiation strategies",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-7759e83ddd809769d6ca",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "should show sale transactions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-e0b604486d4ba162bf61",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 107,
+              "column": 3
+            },
+            {
+              "title": "should handle refresh functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a47d5a65a1842def0669-abe5cfc55a2f5e2c12c9",
+              "file": "phase2-negotiation.spec.ts",
+              "line": 119,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "universal-search.spec.ts",
+      "file": "universal-search.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Universal Search",
+          "file": "universal-search.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display search input with placeholder",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-66bc09dfc72af3ea368f",
+              "file": "universal-search.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should show search suggestions on input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-00d63ee81209eae1b834",
+              "file": "universal-search.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "should support keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-848fe25b2df41c7138ea",
+              "file": "universal-search.spec.ts",
+              "line": 36,
+              "column": 3
+            },
+            {
+              "title": "should show search results",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-ae04366de446aeb13054",
+              "file": "universal-search.spec.ts",
+              "line": 58,
+              "column": 3
+            },
+            {
+              "title": "should support filter chips",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-dd2da55a840dab64eafb",
+              "file": "universal-search.spec.ts",
+              "line": 79,
+              "column": 3
+            },
+            {
+              "title": "should show advanced search options",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-7e5954e7f280c78fd720",
+              "file": "universal-search.spec.ts",
+              "line": 97,
+              "column": 3
+            },
+            {
+              "title": "should support logic operators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-0aaa86ae84fcbf535c69",
+              "file": "universal-search.spec.ts",
+              "line": 113,
+              "column": 3
+            },
+            {
+              "title": "should show search history",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-66f6bb9cb7adb17ab452",
+              "file": "universal-search.spec.ts",
+              "line": 130,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-a14333b2df8df3ffa324",
+              "file": "universal-search.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "should clear search when clear button is clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-6ce9f5a4991080e6d8c2",
+              "file": "universal-search.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "should show loading state during search",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "cf42e4aabc8b569697d3-0654b29d9b03102aee73",
+              "file": "universal-search.spec.ts",
+              "line": 182,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "workflow-apis.spec.ts",
+      "file": "workflow-apis.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Workflow APIs E2E Tests",
+          "file": "workflow-apis.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Project Management APIs",
+              "file": "workflow-apis.spec.ts",
+              "line": 139,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should create a new project",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-2171ca788b919a1890be",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 140,
+                  "column": 5
+                },
+                {
+                  "title": "should retrieve all projects",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-b671892716d2c635d95b",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 154,
+                  "column": 5
+                },
+                {
+                  "title": "should update a project",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-3c362ff8b3a99b66cae9",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 163,
+                  "column": 5
+                },
+                {
+                  "title": "should create a project step",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-b385b415b5b3df7c5a5d",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 185,
+                  "column": 5
+                },
+                {
+                  "title": "should delete a project",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-86a498c947e7e6122ef2",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 220,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Message Handling APIs",
+              "file": "workflow-apis.spec.ts",
+              "line": 238,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should create a new message",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-bc2e2f567a3fa3876d2b",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 239,
+                  "column": 5
+                },
+                {
+                  "title": "should retrieve all messages",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-71a55ecb51ca2c8908c2",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 252,
+                  "column": 5
+                },
+                {
+                  "title": "should process an incoming message",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-104d4e7a8ff69be32082",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 261,
+                  "column": 5
+                },
+                {
+                  "title": "should generate auto response",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-14879c2e49ab9869f889",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 280,
+                  "column": 5
+                },
+                {
+                  "title": "should delete a message",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-7988be079f32c04399c9",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 297,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Flow Modification APIs",
+              "file": "workflow-apis.spec.ts",
+              "line": 315,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should create a new flow",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-d617fac321bd7e6db5db",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 316,
+                  "column": 5
+                },
+                {
+                  "title": "should retrieve all flows",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-65de19a805f6db4c5734",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 329,
+                  "column": 5
+                },
+                {
+                  "title": "should test a flow",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-7b2cfb16231b0979410f",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 338,
+                  "column": 5
+                },
+                {
+                  "title": "should execute a flow",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-204467d7dff3ea48664a",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 368,
+                  "column": 5
+                },
+                {
+                  "title": "should delete a flow",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-4c8777dd7aac82bf42da",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 388,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Post Management APIs",
+              "file": "workflow-apis.spec.ts",
+              "line": 406,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should create a new post",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-e0d4fbeb5bbfc0e281d1",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 407,
+                  "column": 5
+                },
+                {
+                  "title": "should retrieve all posts",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-905a6704a92785d65592",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 420,
+                  "column": 5
+                },
+                {
+                  "title": "should schedule a post",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-f593a2145e5b6f2718db",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 429,
+                  "column": 5
+                },
+                {
+                  "title": "should publish a post",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-f9e59f7791a31b5b1951",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 453,
+                  "column": 5
+                },
+                {
+                  "title": "should get post analytics",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-0e2e89065d83310d93a1",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 473,
+                  "column": 5
+                },
+                {
+                  "title": "should delete a post",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-b720e611053cba15517d",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 482,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Error Handling",
+              "file": "workflow-apis.spec.ts",
+              "line": 500,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should handle invalid project ID",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-6ae09229d88035322544",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 501,
+                  "column": 5
+                },
+                {
+                  "title": "should handle invalid message ID",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-0cd18bd11370e98a3d97",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 510,
+                  "column": 5
+                },
+                {
+                  "title": "should handle invalid flow ID",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-9e4ad60ab319b2976bc6",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 519,
+                  "column": 5
+                },
+                {
+                  "title": "should handle invalid post ID",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-881ea6bc621fe560fbb5",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 528,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Bulk Operations",
+              "file": "workflow-apis.spec.ts",
+              "line": 538,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should handle bulk message updates",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-55994f89313269279529",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 539,
+                  "column": 5
+                },
+                {
+                  "title": "should handle bulk post operations",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "b097c1fdadc6649a1517-35b2776d6e810dc0d068",
+                  "file": "workflow-apis.spec.ts",
+                  "line": 580,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-10-14T16:25:48.368Z",
-    "duration": 1988.585,
+    "startTime": "2025-10-14T17:40:09.099Z",
+    "duration": 443.12700000000007,
     "expected": 0,
-    "skipped": 0,
+    "skipped": 149,
     "unexpected": 0,
     "flaky": 0
   }
