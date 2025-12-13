@@ -1,0 +1,26 @@
+{
+  "environment": "dev",
+  "version": "5.0.0",
+  "endpoints": {
+    "orchestrator": "http://localhost:8787/mcp/orchestrator/",
+    "config": "http://localhost:8787/",
+    "writer": "http://localhost:5173/",
+    "xfiles": "http://localhost:8788/",
+    "otlp": "http://localhost:4318"
+  },
+  "guardian": {
+    "enforcement": "warn",
+    "gates": [1, 2, 5, 6]
+  },
+  "observability": {
+    "tracing": true,
+    "metrics": true,
+    "samplingRate": 1.0
+  },
+  "kvNamespaces": {
+    "liveXmapState": "LIVE_XMAP_STATE_DEV",
+    "workflowLibrary": "WORKFLOW_LIBRARY_DEV",
+    "pow3rPass": "POW3R_PASS_DEV"
+  },
+  "deploymentApproval": false
+}

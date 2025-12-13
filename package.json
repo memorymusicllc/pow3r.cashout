@@ -78,5 +78,6 @@
     "typescript": "5.2.2",
     "vite": "5.1.0",
     "wrangler": "3.78.0"
-  }
+  },
+  "repository": "git@github.com:make-sum/pow3r.cashout.git"
 }

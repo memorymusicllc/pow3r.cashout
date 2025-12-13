@@ -1,0 +1,26 @@
+{
+  "environment": "prod",
+  "version": "5.0.0",
+  "endpoints": {
+    "orchestrator": "https://config.superbots.link/mcp/orchestrator/",
+    "config": "https://config.superbots.link/",
+    "writer": "https://writer.superbots.link/",
+    "xfiles": "https://xfiles.superbots.link/",
+    "otlp": "https://config.superbots.link/otlp"
+  },
+  "guardian": {
+    "enforcement": "strict",
+    "gates": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  },
+  "observability": {
+    "tracing": true,
+    "metrics": true,
+    "samplingRate": 0.1
+  },
+  "kvNamespaces": {
+    "liveXmapState": "LIVE_XMAP_STATE",
+    "workflowLibrary": "WORKFLOW_LIBRARY",
+    "pow3rPass": "POW3R_PASS"
+  },
+  "deploymentApproval": true
+}

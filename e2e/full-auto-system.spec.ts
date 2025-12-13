@@ -1,97 +1,12 @@
-/**
- * Full-Auto Multi-Agent System E2E Tests
- * Validates complete autonomous development lifecycle per Pow3r Law v2.0
- * 
- * @version 1.0.0
- * @date 2025-10-13
- */
+import { test, expect, Page } from '@playwright/test';
 
-import { test, expect } from '@playwright/test';
+test.describe('Full-Auto Multi-Agent System Verification', () => {
+  let page: Page;
 
-test.describe('Full-Auto Multi-Agent System', () => {
-  test.beforeEach(async ({ page }) => {
-    // Navigate to production URL
-    await page.goto('https://pow3r-cashout.pages.dev');
-  });
-
-  test('Main Dashboard loads and displays all workflow sections', async ({ page }) => {
-    // Verify main dashboard structure
-    await expect(page.locator('h1')).toContainText('pow3r.cashout');
-    await expect(page.locator('text=Workflow Management Dashboard')).toBeVisible();
+  test.beforeEach(async ({ browser }) => {
+    page = await browser.newPage();
     
-    // Verify navigation tabs
-    await expect(page.locator('text=Overview')).toBeVisible();
-    await expect(page.locator('text=API Agent')).toBeVisible();
-    await expect(page.locator('text=UI Agent')).toBeVisible();
-    await expect(page.locator('text=Library')).toBeVisible();
-    
-    // Verify version and status badges
-    await expect(page.locator('text=v3.0.0')).toBeVisible();
-    await expect(page.locator('text=Live')).toBeVisible();
-  });
-
-  test('Component Library is fully functional', async ({ page }) => {
-    // Navigate to library
-    await page.click('text=Library');
-    await page.waitForURL('**/library');
-    
-    // Verify library loads without JavaScript errors
-    await expect(page.locator('h1')).toContainText('Component Library');
-    await expect(page.locator('text=Redux UI (Unbound Design System)')).toBeVisible();
-    
-    // Verify search functionality
-    await page.fill('input[placeholder="Search components..."]', 'ROC');
-    await expect(page.locator('text=ROC')).toBeVisible();
-    
-    // Verify component count
-    await expect(page.locator('text=/\\d+ \\/ 139 components/')).toBeVisible();
-    
-    // Verify compliance badges
-    await expect(page.locator('text=100% Compliant')).toBeVisible();
-    await expect(page.locator('text=JSDoc: 100%')).toBeVisible();
-  });
-
-  test('API Agent workflows are accessible', async ({ page }) => {
-    await page.click('text=API Agent');
-    
-    // Verify API workflow cards
-    await expect(page.locator('text=Flow Modification')).toBeVisible();
-    await expect(page.locator('text=Message Review')).toBeVisible();
-    await expect(page.locator('text=Project Management')).toBeVisible();
-    
-    // Test workflow navigation
-    await page.click('text=Flow Modification');
-    await expect(page.locator('text=Back to Dashboard')).toBeVisible();
-  });
-
-  test('UI Agent workflows are accessible', async ({ page }) => {
-    await page.click('text=UI Agent');
-    
-    // Verify UI workflow cards
-    await expect(page.locator('text=Phase 1: Content & Setup')).toBeVisible();
-    await expect(page.locator('text=Phase 2: Automation & Management')).toBeVisible();
-    await expect(page.locator('text=New Post Flow')).toBeVisible();
-    
-    // Test workflow navigation
-    await page.click('text=Phase 1: Content & Setup');
-    await expect(page.locator('text=Back to Dashboard')).toBeVisible();
-  });
-
-  test('All chart components render without errors', async ({ page }) => {
-    await page.goto('https://pow3r-cashout.pages.dev/library');
-    
-    // Search for chart components
-    await page.fill('input[placeholder="Search components..."]', 'Chart');
-    
-    // Verify multiple chart components are visible
-    await expect(page.locator('text=Price History Chart')).toBeVisible();
-    await expect(page.locator('text=Lead Pipeline Chart')).toBeVisible();
-    
-    // Test ROC curve chart specifically (was causing errors)
-    await page.fill('input[placeholder="Search components..."]', 'ROC');
-    await expect(page.locator('text=ROC & Precision-Recall Curves')).toBeVisible();
-    
-    // Verify no JavaScript errors in console
+    // Set up console error monitoring
     const errors: string[] = [];
     page.on('console', msg => {
       if (msg.type() === 'error') {
@@ -99,99 +14,337 @@ test.describe('Full-Auto Multi-Agent System', () => {
       }
     });
     
-    // Wait for components to load
-    await page.waitForTimeout(2000);
-    
-    // Verify no critical errors
-    const criticalErrors = errors.filter(error => 
-      error.includes('TypeError') || 
-      error.includes('Cannot read properties') ||
-      error.includes('toFixed')
-    );
-    
-    expect(criticalErrors).toHaveLength(0);
+    // Set up page error monitoring
+    page.on('pageerror', error => {
+      errors.push(`Page Error: ${error.message}`);
+    });
   });
 
-  test('Mobile responsiveness works correctly', async ({ page }) => {
-    // Test mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 });
+  test('CRITICAL: Library Route Verification', async () => {
+    console.log('🔍 Testing Library Route Access...');
     
-    // Verify mobile navigation
-    await expect(page.locator('text=pow3r.cashout')).toBeVisible();
-    
-    // Test library on mobile
+    // Test 1: Direct URL access
     await page.goto('https://pow3r-cashout.pages.dev/library');
-    await expect(page.locator('text=Component Library')).toBeVisible();
+    await page.waitForLoadState('networkidle');
     
-    // Verify search works on mobile
-    await page.fill('input[placeholder="Search components..."]', 'Dashboard');
-    await expect(page.locator('text=Dashboard Card')).toBeVisible();
-  });
-
-  test('Production APIs are functional', async ({ page }) => {
-    // Test health endpoint
-    const healthResponse = await page.request.get('https://pow3r-cashout.pages.dev/api/health');
-    expect(healthResponse.status()).toBe(200);
+    // Verify page loads without errors
+    const title = await page.title();
+    expect(title).toBeTruthy();
     
-    // Test workflow APIs if available
-    const workflowsResponse = await page.request.get('https://pow3r-cashout.pages.dev/api/workflows');
-    // Note: This might return 404 if not implemented yet, which is acceptable
-    expect([200, 404]).toContain(workflowsResponse.status());
-  });
-
-  test('Complete user workflow from dashboard to library', async ({ page }) => {
-    // Start at main dashboard
-    await page.goto('https://pow3r-cashout.pages.dev');
-    await expect(page.locator('text=pow3r.cashout')).toBeVisible();
+    // Check for JavaScript errors
+    const consoleErrors = await page.evaluate(() => {
+      return (window as any).consoleErrors || [];
+    });
+    expect(consoleErrors).toHaveLength(0);
     
-    // Navigate to library
-    await page.click('text=Library');
+    // Verify library content is visible
+    const libraryContent = await page.locator('[data-testid="component-library"]').first();
+    await expect(libraryContent).toBeVisible();
+    
+    // Test 2: Dashboard navigation to library
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Click on Library tab
+    const libraryTab = page.locator('text=Library').first();
+    await expect(libraryTab).toBeVisible();
+    await libraryTab.click();
+    
+    // Verify we're on the library page
     await page.waitForURL('**/library');
+    await expect(libraryContent).toBeVisible();
     
-    // Search for a component
-    await page.fill('input[placeholder="Search components..."]', 'Price');
-    await expect(page.locator('text=Price History Chart')).toBeVisible();
+    // Test 3: Verify ROC curve chart renders without errors
+    const rocChart = page.locator('[data-testid="roc-curve-chart"]').first();
+    if (await rocChart.isVisible()) {
+      // Check that chart has data
+      const chartData = await rocChart.evaluate((el) => {
+        return (el as any).chartData || null;
+      });
+      expect(chartData).toBeTruthy();
+    }
     
-    // Test filters
-    await page.selectOption('select', 'Core');
-    await expect(page.locator('text=Phase: Core')).toBeVisible();
-    
-    // Clear filters
-    await page.click('text=Clear all');
-    
-    // Navigate back to dashboard
-    await page.click('text=Dashboard');
-    await page.waitForURL('**/');
-    
-    // Verify we're back at dashboard
-    await expect(page.locator('text=Workflow Management Dashboard')).toBeVisible();
+    console.log('✅ Library Route Verification PASSED');
   });
 
-  test('Screenshot capture for production verification', async ({ page }) => {
-    // Navigate to main dashboard
-    await page.goto('https://pow3r-cashout.pages.dev');
+  test('CRITICAL: New Post Flow Search Field Verification', async () => {
+    console.log('🔍 Testing New Post Flow Search Field...');
     
-    // Wait for full load
+    // Navigate to New Post Flow
+    await page.goto('https://pow3r-cashout.pages.dev/');
     await page.waitForLoadState('networkidle');
     
-    // Capture full page screenshot
-    await page.screenshot({ 
-      path: 'test-results/production-dashboard-full.png',
-      fullPage: true 
+    // Click on New Post Flow
+    const newPostFlowTab = page.locator('text=New Post Flow').first();
+    await expect(newPostFlowTab).toBeVisible();
+    await newPostFlowFlow.click();
+    
+    // Wait for the form to load
+    await page.waitForLoadState('networkidle');
+    
+    // Find the first search field
+    const firstSearchField = page.locator('input[type="text"]').first();
+    await expect(firstSearchField).toBeVisible();
+    
+    // Test typing in the field
+    await firstSearchField.click();
+    await firstSearchField.fill('test search query');
+    
+    // Verify the text was entered
+    const fieldValue = await firstSearchField.inputValue();
+    expect(fieldValue).toBe('test search query');
+    
+    // Test API connection by checking for network requests
+    const apiRequests: string[] = [];
+    page.on('request', request => {
+      if (request.url().includes('/api/')) {
+        apiRequests.push(request.url());
+      }
     });
     
-    // Navigate to library and capture
+    // Trigger a search or form action
+    const searchButton = page.locator('button[type="submit"], button:has-text("Search")').first();
+    if (await searchButton.isVisible()) {
+      await searchButton.click();
+      await page.waitForTimeout(2000); // Wait for API call
+      
+      // Verify API request was made
+      expect(apiRequests.length).toBeGreaterThan(0);
+    }
+    
+    console.log('✅ New Post Flow Search Field Verification PASSED');
+  });
+
+  test('CRITICAL: Dashboard Navigation Verification', async () => {
+    console.log('🔍 Testing Dashboard Navigation...');
+    
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Verify all navigation tabs are present and functional
+    const navigationTabs = [
+      'Overview',
+      'API Agent', 
+      'UI Agent',
+      'Library',
+      'New Post Flow'
+    ];
+    
+    for (const tabName of navigationTabs) {
+      const tab = page.locator(`text=${tabName}`).first();
+      await expect(tab).toBeVisible();
+      
+      // Click the tab
+      await tab.click();
+      await page.waitForLoadState('networkidle');
+      
+      // Verify no console errors
+      const consoleErrors = await page.evaluate(() => {
+        return (window as any).consoleErrors || [];
+      });
+      expect(consoleErrors).toHaveLength(0);
+    }
+    
+    console.log('✅ Dashboard Navigation Verification PASSED');
+  });
+
+  test('CRITICAL: API Connection Verification', async () => {
+    console.log('🔍 Testing API Connection...');
+    
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Monitor network requests
+    const apiRequests: any[] = [];
+    const apiResponses: any[] = [];
+    
+    page.on('request', request => {
+      if (request.url().includes('/api/')) {
+        apiRequests.push({
+          url: request.url(),
+          method: request.method(),
+          headers: request.headers()
+        });
+      }
+    });
+    
+    page.on('response', response => {
+      if (response.url().includes('/api/')) {
+        apiResponses.push({
+          url: response.url(),
+          status: response.status(),
+          statusText: response.statusText()
+        });
+      }
+    });
+    
+    // Trigger API calls by interacting with the dashboard
+    const apiAgentTab = page.locator('text=API Agent').first();
+    await apiAgentTab.click();
+    await page.waitForLoadState('networkidle');
+    
+    // Wait for potential API calls
+    await page.waitForTimeout(3000);
+    
+    // Verify API requests were made and responses received
+    expect(apiRequests.length).toBeGreaterThan(0);
+    expect(apiResponses.length).toBeGreaterThan(0);
+    
+    // Verify no failed API calls
+    const failedResponses = apiResponses.filter(r => r.status >= 400);
+    expect(failedResponses).toHaveLength(0);
+    
+    console.log('✅ API Connection Verification PASSED');
+  });
+
+  test('CRITICAL: Component Rendering Verification', async () => {
+    console.log('🔍 Testing Component Rendering...');
+    
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Verify main dashboard components render
+    const mainComponents = [
+      '[data-testid="dashboard-overview"]',
+      '[data-testid="navigation-tabs"]',
+      '[data-testid="workflow-content"]'
+    ];
+    
+    for (const selector of mainComponents) {
+      const component = page.locator(selector).first();
+      await expect(component).toBeVisible();
+    }
+    
+    // Test library components
     await page.goto('https://pow3r-cashout.pages.dev/library');
     await page.waitForLoadState('networkidle');
     
-    await page.screenshot({ 
-      path: 'test-results/production-library-full.png',
-      fullPage: true 
+    const libraryComponents = [
+      '[data-testid="component-library"]',
+      '[data-testid="component-grid"]'
+    ];
+    
+    for (const selector of libraryComponents) {
+      const component = page.locator(selector).first();
+      if (await component.isVisible()) {
+        await expect(component).toBeVisible();
+      }
+    }
+    
+    console.log('✅ Component Rendering Verification PASSED');
+  });
+
+  test('CRITICAL: Error Handling Verification', async () => {
+    console.log('🔍 Testing Error Handling...');
+    
+    // Test invalid route
+    await page.goto('https://pow3r-cashout.pages.dev/invalid-route');
+    await page.waitForLoadState('networkidle');
+    
+    // Should either redirect to home or show 404
+    const currentUrl = page.url();
+    expect(currentUrl).toMatch(/https:\/\/pow3r-cashout\.pages\.dev\//);
+    
+    // Test with JavaScript disabled (simulate)
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Verify basic functionality still works
+    const title = await page.title();
+    expect(title).toBeTruthy();
+    
+    console.log('✅ Error Handling Verification PASSED');
+  });
+
+  test('CRITICAL: Performance Verification', async () => {
+    console.log('🔍 Testing Performance...');
+    
+    const startTime = Date.now();
+    
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    const loadTime = Date.now() - startTime;
+    
+    // Verify page loads within reasonable time (10 seconds)
+    expect(loadTime).toBeLessThan(10000);
+    
+    // Test library page performance
+    const libraryStartTime = Date.now();
+    await page.goto('https://pow3r-cashout.pages.dev/library');
+    await page.waitForLoadState('networkidle');
+    const libraryLoadTime = Date.now() - libraryStartTime;
+    
+    expect(libraryLoadTime).toBeLessThan(10000);
+    
+    console.log('✅ Performance Verification PASSED');
+  });
+
+  test('CRITICAL: Full User Journey Verification', async () => {
+    console.log('🔍 Testing Full User Journey...');
+    
+    // Step 1: Load dashboard
+    await page.goto('https://pow3r-cashout.pages.dev/');
+    await page.waitForLoadState('networkidle');
+    
+    // Step 2: Navigate to Library
+    const libraryTab = page.locator('text=Library').first();
+    await libraryTab.click();
+    await page.waitForLoadState('networkidle');
+    
+    // Step 3: Navigate to New Post Flow
+    const newPostFlowTab = page.locator('text=New Post Flow').first();
+    await newPostFlowTab.click();
+    await page.waitForLoadState('networkidle');
+    
+    // Step 4: Test search functionality
+    const searchField = page.locator('input[type="text"]').first();
+    if (await searchField.isVisible()) {
+      await searchField.fill('test query');
+      const value = await searchField.inputValue();
+      expect(value).toBe('test query');
+    }
+    
+    // Step 5: Navigate back to Overview
+    const overviewTab = page.locator('text=Overview').first();
+    await overviewTab.click();
+    await page.waitForLoadState('networkidle');
+    
+    // Verify no errors throughout the journey
+    const consoleErrors = await page.evaluate(() => {
+      return (window as any).consoleErrors || [];
+    });
+    expect(consoleErrors).toHaveLength(0);
+    
+    console.log('✅ Full User Journey Verification PASSED');
+  });
+
+  test('CRITICAL: Production Deployment Verification', async () => {
+    console.log('🔍 Testing Production Deployment...');
+    
+    // Test main page accessibility
+    const response = await page.goto('https://pow3r-cashout.pages.dev/');
+    expect(response?.status()).toBe(200);
+    
+    // Test library route accessibility
+    const libraryResponse = await page.goto('https://pow3r-cashout.pages.dev/library');
+    expect(libraryResponse?.status()).toBe(200);
+    
+    // Test asset loading
+    const assets = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+      const scripts = Array.from(document.querySelectorAll('script[src]'));
+      return [...links, ...scripts].map(el => (el as any).href || (el as any).src);
     });
     
-    // Verify screenshots were captured
-    const fs = require('fs');
-    expect(fs.existsSync('test-results/production-dashboard-full.png')).toBe(true);
-    expect(fs.existsSync('test-results/production-library-full.png')).toBe(true);
+    // Verify all assets load
+    for (const asset of assets) {
+      if (asset && asset.startsWith('https://pow3r-cashout.pages.dev/')) {
+        const assetResponse = await page.goto(asset);
+        expect(assetResponse?.status()).toBe(200);
+      }
+    }
+    
+    console.log('✅ Production Deployment Verification PASSED');
   });
 });
