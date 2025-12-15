@@ -1,0 +1,438 @@
+{
+  "$schema": "https://pow3r.link/schemas/pow3r.v5.config.schema.json",
+  "configId": "pow3r-v5-pow3r.cashout",
+  "version": "0.1.0",
+  "schemaVersion": {
+    "current": "5.0.0",
+    "minSupported": "5.0.0"
+  },
+  "metadata": {
+    "title": "pow3r.cashout Config",
+    "description": "Pow3r v5 unified config for pow3r.cashout",
+    "ecosystem": "pow3r",
+    "maintainers": [
+      "Power Flow"
+    ],
+    "createdAt": "2025-12-15T01:20:50.370Z",
+    "lastUpdate": "2025-12-15T01:20:50.370Z"
+  },
+  "constitution": {
+    "version": "5.0.0",
+    "enforcement": "strict",
+    "techStackCompliant": true,
+    "issues": []
+  },
+  "techStack": {
+    "hasReact": true,
+    "hasVite": true,
+    "hasTailwind": true,
+    "hasTypeScript": true,
+    "hasZustand": true,
+    "framework": "react",
+    "dependencies": [
+      "@floating-ui/react",
+      "@headlessui/react",
+      "@hookform/resolvers",
+      "@prisma/client",
+      "@tanstack/react-query",
+      "chart.js",
+      "clsx",
+      "cors",
+      "csv",
+      "date-fns",
+      "dayjs",
+      "embla-carousel-react",
+      "express",
+      "formik",
+      "framer-motion",
+      "jotai",
+      "lodash",
+      "lucide-react",
+      "puppeteer",
+      "react",
+      "react-chartjs-2",
+      "react-dom",
+      "react-hook-form",
+      "react-hot-toast",
+      "react-intersection-observer",
+      "react-is",
+      "react-resizable-panels",
+      "react-router-dom",
+      "react-select",
+      "react-use",
+      "recharts",
+      "sqlite3",
+      "swr",
+      "tailwind-scrollbar-hide",
+      "zod",
+      "zustand",
+      "@playwright/test",
+      "@types/lodash",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@typescript-eslint/eslint-plugin",
+      "@typescript-eslint/parser",
+      "@vitejs/plugin-react",
+      "autoprefixer",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "postcss",
+      "tailwind-merge",
+      "tailwindcss",
+      "typescript",
+      "vite",
+      "wrangler"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "pow3r.cashout",
+      "type": "repository.application",
+      "version": "0.1.0",
+      "metadata": {
+        "title": "pow3r.cashout",
+        "description": "",
+        "tags": [
+          "@floating-ui/react",
+          "@headlessui/react",
+          "@hookform/resolvers",
+          "@prisma/client",
+          "@tanstack/react-query"
+        ]
+      },
+      "spatialPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "scale": 2
+      },
+      "developmentStatus": {
+        "phase": "in-progress",
+        "completion": 0.9999999999999999,
+        "healthScore": 1,
+        "lastUpdate": "2025-12-13T06:29:49.000Z"
+      }
+    },
+    {
+      "id": "pow3r.cashout.ui",
+      "type": "component.ui",
+      "version": "1.0.0",
+      "metadata": {
+        "title": "Ui",
+        "description": "144 ui components",
+        "tags": [
+          "ui"
+        ]
+      },
+      "spatialPosition": {
+        "x": -100,
+        "y": 50,
+        "z": 10
+      },
+      "developmentStatus": {
+        "phase": "complete",
+        "completion": 1,
+        "healthScore": 0.95
+      },
+      "children": [
+        "MetadataDisplay",
+        "NewPostFlow",
+        "Phase1Dashboard",
+        "Phase2Dashboard",
+        "auto-responder-manager",
+        "bloom-graph-chart",
+        "confusion-matrix-chart",
+        "cost-analysis-chart",
+        "error-rate-chart",
+        "gantt-chart",
+        "heatmap-chart",
+        "latency-distribution-chart",
+        "leads-chart",
+        "llm-performance-chart",
+        "model-comparison-chart",
+        "network-graph-chart",
+        "price-chart",
+        "quadrant-leader-chart",
+        "quality-metrics-chart",
+        "request-volume-chart",
+        "roc-curve-chart",
+        "sankey-diagram-chart",
+        "scatter-plot-chart",
+        "timeline-chart",
+        "token-usage-chart",
+        "usage-patterns-chart",
+        "word-cloud-chart",
+        "AIResponseSystem",
+        "AdminPanel",
+        "AnalyticsDashboard",
+        "AutoPostingEngine",
+        "AutomationEngine",
+        "ContentGenerator",
+        "ItemDetailsCollector",
+        "LLMSwitcher",
+        "LeadMonitor",
+        "MessageCenter",
+        "NegotiationManager",
+        "PhotoProcessor",
+        "PlatformSelector",
+        "PostingStrategy",
+        "PriceResearcher",
+        "PromptTemplatesManager",
+        "ResponseTemplatesManager",
+        "SaleProcessor",
+        "UserManager",
+        "dashboard-layout",
+        "dashboard-overview",
+        "leads-manager",
+        "listing-generator",
+        "listing-management",
+        "WorkflowActions",
+        "WorkflowCard",
+        "WorkflowProgress",
+        "WorkflowStatus",
+        "WorkflowStep",
+        "providers",
+        "Badge",
+        "Button",
+        "Card",
+        "CodeEditor",
+        "ConnectionStatus",
+        "DashboardCard",
+        "Input",
+        "Progress",
+        "ResponsiveGrid",
+        "Select",
+        "Separator",
+        "Tabs",
+        "UIElementsFilter",
+        "index",
+        "response-monitor",
+        "FilterChips",
+        "LogicOperators",
+        "Search3D",
+        "SearchIntegration",
+        "UniversalSearch",
+        "sidebar",
+        "theme-provider",
+        "accordion",
+        "alert-dialog",
+        "alert",
+        "aspect-ratio",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "calendar",
+        "card",
+        "carousel",
+        "checkbox",
+        "code-editor",
+        "collapsible",
+        "command",
+        "connection-status",
+        "context-menu",
+        "dashboard-card",
+        "date-range-picker",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
+        "form",
+        "hover-card",
+        "input-otp",
+        "input",
+        "label",
+        "menubar",
+        "mobile-nav",
+        "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "responsive-grid",
+        "scroll-area",
+        "select",
+        "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "sonner",
+        "switch",
+        "table",
+        "tabs",
+        "task-card",
+        "textarea",
+        "toast",
+        "toaster",
+        "toggle-group",
+        "toggle",
+        "tooltip",
+        "ui-elements-filter",
+        "use-toast",
+        "FlowModificationWorkflow",
+        "MessageReviewWorkflow",
+        "PostManagementWorkflow",
+        "ProjectManagementWorkflow",
+        "WorkflowActions",
+        "WorkflowCard",
+        "WorkflowDashboard",
+        "WorkflowProgress",
+        "WorkflowStatus",
+        "WorkflowStep"
+      ]
+    },
+    {
+      "id": "pow3r.cashout.services",
+      "type": "component.services",
+      "version": "1.0.0",
+      "metadata": {
+        "title": "Services",
+        "description": "2 services components",
+        "tags": [
+          "services"
+        ]
+      },
+      "spatialPosition": {
+        "x": -50,
+        "y": 90,
+        "z": 10
+      },
+      "developmentStatus": {
+        "phase": "complete",
+        "completion": 1,
+        "healthScore": 0.95
+      },
+      "children": [
+        "index",
+        "types"
+      ]
+    },
+    {
+      "id": "pow3r.cashout.functions",
+      "type": "component.functions",
+      "version": "1.0.0",
+      "metadata": {
+        "title": "Functions",
+        "description": "8 functions components",
+        "tags": [
+          "functions"
+        ]
+      },
+      "spatialPosition": {
+        "x": -75,
+        "y": 130,
+        "z": 10
+      },
+      "developmentStatus": {
+        "phase": "complete",
+        "completion": 1,
+        "healthScore": 0.95
+      },
+      "children": [
+        "_middleware",
+        "templates",
+        "login",
+        "auto-responses",
+        "dashboard",
+        "setup",
+        "garage",
+        "health"
+      ]
+    },
+    {
+      "id": "pow3r.cashout.hooks",
+      "type": "component.hooks",
+      "version": "1.0.0",
+      "metadata": {
+        "title": "Hooks",
+        "description": "5 hooks components",
+        "tags": [
+          "hooks"
+        ]
+      },
+      "spatialPosition": {
+        "x": 75,
+        "y": 170,
+        "z": 10
+      },
+      "developmentStatus": {
+        "phase": "complete",
+        "completion": 1,
+        "healthScore": 0.95
+      },
+      "children": [
+        "use-auto-responder",
+        "use-dashboard-data",
+        "use-listings",
+        "use-real-time",
+        "use-toast"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-pow3r.cashout-pow3r.cashout.ui",
+      "from": {
+        "nodeId": "pow3r.cashout"
+      },
+      "to": {
+        "nodeId": "pow3r.cashout.ui"
+      },
+      "edgeType": "contains",
+      "metadata": {
+        "label": "Contains",
+        "strength": 1
+      }
+    },
+    {
+      "id": "edge-pow3r.cashout-pow3r.cashout.services",
+      "from": {
+        "nodeId": "pow3r.cashout"
+      },
+      "to": {
+        "nodeId": "pow3r.cashout.services"
+      },
+      "edgeType": "contains",
+      "metadata": {
+        "label": "Contains",
+        "strength": 1
+      }
+    },
+    {
+      "id": "edge-pow3r.cashout-pow3r.cashout.functions",
+      "from": {
+        "nodeId": "pow3r.cashout"
+      },
+      "to": {
+        "nodeId": "pow3r.cashout.functions"
+      },
+      "edgeType": "contains",
+      "metadata": {
+        "label": "Contains",
+        "strength": 1
+      }
+    },
+    {
+      "id": "edge-pow3r.cashout-pow3r.cashout.hooks",
+      "from": {
+        "nodeId": "pow3r.cashout"
+      },
+      "to": {
+        "nodeId": "pow3r.cashout.hooks"
+      },
+      "edgeType": "contains",
+      "metadata": {
+        "label": "Contains",
+        "strength": 1
+      }
+    }
+  ],
+  "statusSummary": {
+    "totalNodes": 5,
+    "totalComponents": 159,
+    "overallCompletion": 1,
+    "issueCount": 0
+  }
+}
